@@ -34,30 +34,36 @@ header:has(.uoa-header) {
   box-shadow: rgb(0 0 0 / 15%) 0 2px 4px 0;
 }
 
-/* ---- Brand + utility band ---- */
+/* ---- Brand + utility band ----
+   Logo is absolutely positioned so it spans BOTH the utility and main rows,
+   vertically centred, with the nav content inset to its right (matches source). */
+.uoa-header .nav-brand {
+  position: absolute;
+  left: 24px;
+  top: 38px; /* below the 38px accent strip */
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  z-index: 4;
+}
+
+/* Size by width (the brand mark is a wide lockup); vertically centred in the band */
+.uoa-header .nav-brand .icon,
+.uoa-header .nav-brand img {
+  width: 190px;
+  height: auto;
+  display: block;
+}
+
 /* stylelint-disable-next-line no-descending-specificity */
 .uoa-header .nav-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: 12px 24px 12px 232px; /* left inset clears the logo */
   background-color: var(--uoa-white);
-}
-
-.uoa-header .nav-brand {
-  display: inline-flex;
-  align-items: center;
-  flex: 0 0 auto;
-}
-
-.uoa-header .nav-brand .icon,
-.uoa-header .nav-brand img {
-  height: 84px;
-  width: auto;
-  display: block;
 }
 
 .uoa-header .nav-top-tools {
@@ -65,7 +71,11 @@ header:has(.uoa-header) {
   align-items: center;
   gap: 24px;
   flex: 1 1 auto;
-  justify-content: flex-end;
+}
+
+/* Utility menu sits left (next to logo); search + sign in pushed right */
+.uoa-header .nav-utility {
+  margin-right: auto;
 }
 
 /* Utility menu (Students / Staff / Alumni) */
@@ -217,8 +227,7 @@ header:has(.uoa-header) {
   gap: 36px;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px 16px;
-  padding-left: 316px; /* align with logo width so nav sits right of the shield */
+  padding: 0 24px 16px 232px; /* left inset clears the logo */
 }
 
 /* ---- Megamenu panels ---- */
@@ -346,14 +355,24 @@ header:has(.uoa-header) {
    ===================================================================== */
 @media (max-width: 899px) {
   .uoa-header .nav-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 8px 16px;
     position: relative;
     z-index: 60;
   }
 
+  /* On mobile the logo returns to normal flow (no two-row span) */
+  .uoa-header .nav-brand {
+    position: static;
+    inset: auto;
+  }
+
   .uoa-header .nav-brand .icon,
   .uoa-header .nav-brand img {
-    height: 56px;
+    width: auto;
+    height: 48px;
   }
 
   /* Show hamburger */
