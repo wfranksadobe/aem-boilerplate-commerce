@@ -291,8 +291,14 @@ export default async function decorate(block) {
   brand.className = 'nav-brand';
   brand.href = brandLink ? brandLink.getAttribute('href') : 'https://www.auckland.ac.nz/';
   brand.setAttribute('aria-label', 'Waipapa Taumata Rau, University of Auckland');
-  // Logo comes from an :icon-token: in the fragment (e.g. :logo-oua-blue:).
-  if (brandLink && replaceIconToken(brandLink)) {
+  // Logo comes from an icon token in the fragment (e.g. :logo-uoa-blue:).
+  // On localhost the token is literal text; on DA/EDS production it is already
+  // converted to <span class="icon">. Handle a pre-converted span, a literal
+  // token, and a plain <img> fallback.
+  const brandIconSpan = brandSection && brandSection.querySelector('.icon');
+  if (brandIconSpan) {
+    brand.append(brandIconSpan.cloneNode(true));
+  } else if (brandLink && replaceIconToken(brandLink)) {
     brand.append(brandLink.querySelector('.icon'));
   } else {
     const brandImg = brandSection && brandSection.querySelector('img');
