@@ -19,11 +19,14 @@ async function fetchLocalizedNav(navPath) {
   const config = await getLanguageConfig();
   const code = getLocaleFromPath(window.location.pathname, config);
   const candidates = [];
+  // Locale-specific fragment, in both content-root (localhost) and root (prod) layouts.
   if (code && code !== config.default) {
-    candidates.push(`/content/${code}/nav.plain.html`);
+    candidates.push(`/content/${code}/nav.plain.html`, `/${code}/nav.plain.html`);
   }
+  // Production block metadata path, if provided.
   if (navPath && navPath !== '/nav') candidates.push(`${navPath}.plain.html`);
-  candidates.push('/content/nav.plain.html');
+  // Default English fragment: content-root (localhost) then root (prod).
+  candidates.push('/content/nav.plain.html', '/nav.plain.html');
   // Try each unique candidate in order; return the first that resolves.
   const unique = [...new Set(candidates)];
   return unique.reduce(async (prev, url) => {

@@ -17,11 +17,14 @@ async function fetchLocalizedFooter(footerPath) {
   const config = await getLanguageConfig();
   const code = getLocaleFromPath(window.location.pathname, config);
   const candidates = [];
+  // Locale-specific fragment, in both content-root (localhost) and root (prod) layouts.
   if (code && code !== config.default) {
-    candidates.push(`/content/${code}/footer.plain.html`);
+    candidates.push(`/content/${code}/footer.plain.html`, `/${code}/footer.plain.html`);
   }
+  // Production block metadata path, if provided.
   if (footerPath && footerPath !== '/footer') candidates.push(`${footerPath}.plain.html`);
-  candidates.push('/content/footer.plain.html');
+  // Default English fragment: content-root (localhost) then root (prod).
+  candidates.push('/content/footer.plain.html', '/footer.plain.html');
   // Try each unique candidate in order; return the first that resolves.
   const unique = [...new Set(candidates)];
   return unique.reduce(async (prev, url) => {
