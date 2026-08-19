@@ -14,6 +14,13 @@ header:has(.uoa-header) {
   --uoa-grey: #4a4a4c;
   --uoa-white: #fff;
 
+  /* Match the page content column (content wrappers render at max-width
+     1264px with 24px side padding). --uoa-gutter is the distance from the
+     viewport edge to where page content begins on wide screens. */
+  --uoa-content-max: 1264px;
+  --uoa-side-pad: 24px;
+  --uoa-gutter: max(var(--uoa-side-pad), calc((100% - var(--uoa-content-max)) / 2 + var(--uoa-side-pad)));
+
   position: relative;
 
   /* CJK fallback so links like "China website 中文网站" render correctly */
@@ -39,7 +46,7 @@ header:has(.uoa-header) {
    vertically centred, with the nav content inset to its right (matches source). */
 .uoa-header .nav-brand {
   position: absolute;
-  left: 24px;
+  left: var(--uoa-gutter); /* aligns with the page content column */
   top: 38px; /* below the 38px accent strip */
   bottom: 0;
   display: inline-flex;
@@ -60,9 +67,11 @@ header:has(.uoa-header) {
   display: flex;
   align-items: center;
   gap: 24px;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 12px 24px 12px 232px; /* left inset clears the logo */
+
+  /* Full-width band; padding measured from the viewport edge so it shares the
+     logo's origin. Left = content gutter + logo clearance (190px + gap);
+     right = content gutter, keeping the row within the content column. */
+  padding: 12px var(--uoa-gutter) 12px calc(var(--uoa-gutter) + 208px);
   background-color: var(--uoa-white);
 }
 
@@ -225,9 +234,7 @@ header:has(.uoa-header) {
 .uoa-header .nav-main .nav-list {
   display: flex;
   gap: 36px;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 24px 16px 232px; /* left inset clears the logo */
+  padding: 0 var(--uoa-gutter) 16px calc(var(--uoa-gutter) + 208px);
 }
 
 /* ---- Megamenu panels ---- */
