@@ -1,9 +1,8 @@
-/* University of Auckland hero — a banner image cropped from the TOP to a fixed
-   height, with a text overlay aligned to the same content column as the nav.
-   The source scales the image to full width (natural 10:3) then clips it to a
-   shorter fixed-height box anchored at the top (overflow hidden), so the grassy
-   foreground is cropped off. We replicate that with object-fit: cover +
-   object-position: top and the source's fixed heights (336 / 300 / 261).
+/* University of Auckland hero — replicates the source exactly:
+   the hero box is a shorter fixed height (336/300/261px) and the banner image
+   fills it via object-fit: cover anchored to the TOP (object-position: center top),
+   so it is not zoomed and the grassy foreground is cropped off the bottom while
+   the sky / Rangitoto / harbour stay in view at every breakpoint.
    Heading InterDisplay/Inter 40px/600, text Inter 20px/400, both white. */
 
 .hero-container .hero-wrapper {
@@ -12,8 +11,7 @@
 }
 
 .hero {
-  /* Match the page content column (1264px, 24px side padding), same as the nav.
-     --hero-gutter is the distance from the viewport edge to the content column. */
+  /* Match the page content column (1264px, 24px side padding), same as the nav. */
   --hero-content-max: 1264px;
   --hero-side-pad: 24px;
   --hero-gutter: max(var(--hero-side-pad), calc((100% - var(--hero-content-max)) / 2 + var(--hero-side-pad)));
@@ -22,26 +20,28 @@
   display: flex;
   flex-direction: column;
   justify-content: center; /* text sits in the vertical middle, as per source */
-  height: 336px; /* source desktop banner height */
+  height: 336px; /* source desktop banner height (clips the taller image) */
   padding: 0 var(--hero-gutter);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: hidden; /* clip the bottom of the taller image */
 }
 
 .hero picture {
   position: absolute;
   z-index: -1;
   inset: 0;
-  box-sizing: border-box;
 }
 
-/* Image fills the width and is cropped from the TOP — matches the source, which
-   clips the grassy foreground off the bottom (object-position: top). */
+/* Image fills the fixed-height box and is anchored to the TOP, so the grassy
+   foreground is cropped off the bottom (matching the source) while the sky /
+   Rangitoto / harbour stay in view. cover keeps it undistorted and gap-free at
+   every breakpoint. */
 .hero img {
-  object-fit: cover;
-  object-position: top center;
+  display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center top;
 }
 
 /* Heading — InterDisplay (falls back to Inter), 40px / 600, white */
