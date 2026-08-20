@@ -1,8 +1,9 @@
-/* University of Auckland hero — a fixed 10:3 (1600x480) banner image with a
-   text overlay aligned to the same content column as the nav.
-   The source uses a pre-cropped 3.33:1 image stretched to fill a 3.33:1 box
-   (object-fit: fill) so the whole image is always shown — never zoomed/cropped
-   at any width. We replicate that with aspect-ratio + object-fit: fill.
+/* University of Auckland hero — a banner image cropped from the TOP to a fixed
+   height, with a text overlay aligned to the same content column as the nav.
+   The source scales the image to full width (natural 10:3) then clips it to a
+   shorter fixed-height box anchored at the top (overflow hidden), so the grassy
+   foreground is cropped off. We replicate that with object-fit: cover +
+   object-position: top and the source's fixed heights (336 / 300 / 261).
    Heading InterDisplay/Inter 40px/600, text Inter 20px/400, both white. */
 
 .hero-container .hero-wrapper {
@@ -21,13 +22,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center; /* text sits in the vertical middle, as per source */
-
-  /* Fixed banner ratio (1600:480 = 10:3) so the image is never cropped/zoomed */
-  aspect-ratio: 10 / 3;
-  min-height: 261px; /* source floor on small screens */
-  max-height: 576px; /* source cap on very wide screens */
+  height: 336px; /* source desktop banner height */
   padding: 0 var(--hero-gutter);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .hero picture {
@@ -37,10 +35,11 @@
   box-sizing: border-box;
 }
 
-/* object-fit: fill matches the source (image ratio == box ratio, so no
-   distortion); the whole banner is always visible with no zoom. */
+/* Image fills the width and is cropped from the TOP — matches the source, which
+   clips the grassy foreground off the bottom (object-position: top). */
 .hero img {
-  object-fit: fill;
+  object-fit: cover;
+  object-position: top center;
   width: 100%;
   height: 100%;
 }
@@ -68,11 +67,21 @@
 }
 
 @media (max-width: 899px) {
+  .hero {
+    height: 300px;
+  }
+
   .hero h1 {
     font-size: 32px;
   }
 
   .hero p {
     font-size: 18px;
+  }
+}
+
+@media (max-width: 599px) {
+  .hero {
+    height: 261px;
   }
 }
