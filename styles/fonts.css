@@ -142,7 +142,35 @@
 @font-face {
   font-family: inter;
   font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: inter;
+  font-style: normal;
   font-weight: 700;
   font-display: swap;
   src: url('../fonts/inter-700.woff2') format('woff2');
+}
+
+/* InterDisplay — the display optical size of Inter used for large headings on
+   the source site. The dedicated InterDisplay web files are not bundled, so we
+   map the family to the Inter faces (same design/metrics); near-identical at
+   large sizes. Swap in InterDisplay-*.woff2 here if/when licensed files are added. */
+@font-face {
+  font-family: interdisplay;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: interdisplay;
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-600.woff2') format('woff2');
 }

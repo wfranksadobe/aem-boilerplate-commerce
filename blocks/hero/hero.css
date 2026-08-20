@@ -1,26 +1,33 @@
+/* University of Auckland hero — full-bleed image with a text overlay whose
+   content aligns to the same content column as the nav.
+   Source styles: heading InterDisplay/Inter 40px/600, text Inter 20px/400,
+   both white; text overlays the lower portion of the image. */
+
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
 }
 
 .hero {
-  position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
-}
+  /* Match the page content column (1264px, 24px side padding), same as the nav.
+     --hero-gutter is the distance from the viewport edge to the content column. */
+  --hero-content-max: 1264px;
+  --hero-side-pad: 24px;
+  --hero-gutter: max(var(--hero-side-pad), calc((100% - var(--hero-content-max)) / 2 + var(--hero-side-pad)));
 
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* text sits toward the bottom of the image */
+  min-height: 360px;
+  padding: 48px var(--hero-gutter);
+  box-sizing: border-box;
 }
 
 .hero picture {
   position: absolute;
   z-index: -1;
   inset: 0;
-  object-fit: cover;
   box-sizing: border-box;
 }
 
@@ -30,8 +37,39 @@
   height: 100%;
 }
 
-@media (min-width: 900px) {
+/* Heading — InterDisplay (falls back to Inter), 40px / 600, white */
+.hero h1 {
+  margin: 0 0 9px;
+  max-width: var(--hero-content-max);
+  font-family: interdisplay, inter, sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+}
+
+/* Supporting text — Inter, 20px / 400, white */
+.hero p {
+  margin: 0;
+  max-width: 640px;
+  font-family: inter, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.69;
+  color: #fff;
+}
+
+@media (max-width: 899px) {
   .hero {
-    padding: 40px 32px;
+    min-height: 260px;
+    padding: 32px 16px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 18px;
   }
 }
