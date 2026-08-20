@@ -180,6 +180,19 @@
     ]
   },
   {
+    "id": "breadcrumb",
+    "fields": [
+      {
+        "component": "text",
+        "name": "depth",
+        "value": "",
+        "label": "Depth",
+        "valueType": "number",
+        "description": "How many levels to show, counting back from the current page. Leave empty or 0 to show the full trail."
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {

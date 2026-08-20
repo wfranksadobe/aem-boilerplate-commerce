@@ -94,6 +94,18 @@
           }
         },
         {
+          "title": "Breadcrumb",
+          "id": "breadcrumb",
+          "model": "breadcrumb",
+          "plugins": {
+            "da": {
+              "name": "breadcrumb",
+              "rows": 1,
+              "columns": 2
+            }
+          }
+        },
+        {
           "title": "Cards",
           "id": "cards",
           "model": "cards",
