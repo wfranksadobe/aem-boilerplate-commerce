@@ -142,12 +142,14 @@ header:has(.uoa-header) {
   color: var(--uoa-navy);
 }
 
-/* Primary nav is larger than the utility row */
-.uoa-header .nav-main .nav-reo {
+/* Larger nav labels across both the utility and main rows */
+.uoa-header .nav-main .nav-reo,
+.uoa-header .nav-utility .nav-reo {
   font-size: 16px;
 }
 
-.uoa-header .nav-main .nav-en {
+.uoa-header .nav-main .nav-en,
+.uoa-header .nav-utility .nav-en {
   font-size: 19px;
 }
 
