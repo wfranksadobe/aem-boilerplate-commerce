@@ -57,7 +57,7 @@ header:has(.uoa-header) {
 /* Size by width (the brand mark is a wide lockup); vertically centred in the band */
 .uoa-header .nav-brand .icon,
 .uoa-header .nav-brand img {
-  width: 190px;
+  width: 168px;
   height: auto;
   display: block;
 }
@@ -69,9 +69,9 @@ header:has(.uoa-header) {
   gap: 24px;
 
   /* Full-width band; padding measured from the viewport edge so it shares the
-     logo's origin. Left = content gutter + logo clearance (190px + gap);
+     logo's origin. Left = content gutter + logo clearance (168px + gap);
      right = content gutter, keeping the row within the content column. */
-  padding: 12px var(--uoa-gutter) 12px calc(var(--uoa-gutter) + 208px);
+  padding: 12px var(--uoa-gutter) 12px calc(var(--uoa-gutter) + 188px);
   background-color: var(--uoa-white);
 }
 
@@ -140,6 +140,15 @@ header:has(.uoa-header) {
 .uoa-header .nav-utility .nav-en,
 .uoa-header .nav-utility .nav-reo {
   color: var(--uoa-navy);
+}
+
+/* Primary nav is larger than the utility row */
+.uoa-header .nav-main .nav-reo {
+  font-size: 16px;
+}
+
+.uoa-header .nav-main .nav-en {
+  font-size: 19px;
 }
 
 .uoa-header .nav-trigger:hover .nav-en,
@@ -233,8 +242,8 @@ header:has(.uoa-header) {
 
 .uoa-header .nav-main .nav-list {
   display: flex;
-  gap: 36px;
-  padding: 0 var(--uoa-gutter) 16px calc(var(--uoa-gutter) + 208px);
+  gap: 44px;
+  padding: 0 var(--uoa-gutter) 16px calc(var(--uoa-gutter) + 188px);
 }
 
 /* ---- Megamenu panels ---- */
