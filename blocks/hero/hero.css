@@ -35,7 +35,7 @@
 
 .hero picture {
   position: absolute;
-  z-index: -1;
+  z-index: -2;
   inset: 0;
 }
 
@@ -45,6 +45,18 @@
   height: 100%;
   object-fit: cover;
   object-position: center top;
+}
+
+/* Darkening overlay — matches the source: solid black at 40% opacity over the
+   whole image so the white text stays legible. Sits above the image (z -2) and
+   below the text (normal flow). */
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: #000;
+  opacity: 0.4;
 }
 
 /* Heading — InterDisplay (falls back to Inter), 30/39 600 on mobile */
