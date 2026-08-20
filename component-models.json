@@ -442,6 +442,13 @@
         "component": "text",
         "name": "text",
         "value": "",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "subtext",
+        "value": "",
         "label": "Text",
         "valueType": "string"
       }

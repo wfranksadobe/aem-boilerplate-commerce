@@ -256,6 +256,10 @@
                 {
                   "name": "text",
                   "selector": "div>div>h1"
+                },
+                {
+                  "name": "subtext",
+                  "selector": "div>div>p"
                 }
               ]
             }
