@@ -12,6 +12,10 @@ helix-importer-ui
 scripts/__dropins__/**/*.map
 .env
 
+# Scratch files used when staging content uploads to DA
+.tmp-index.html
+.tmp-articles/
+
 # Ensure these files are tracked
 !CLAUDE.md
 !AGENTS.md
