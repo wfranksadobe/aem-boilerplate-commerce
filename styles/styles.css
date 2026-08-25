@@ -163,7 +163,18 @@ body:not(.appear) {
 
 header {
   grid-row: 1;
-  height: var(--nav-height);
+
+  /* Reserve the header's real height from first paint so `main` doesn't shift
+     down when the nav loads in the lazy phase (avoids layout shift / CLS).
+     UoA header = 38px accent strip + nav rows: 102px on mobile, 198px on
+     desktop (two nav rows). */
+  min-height: 102px;
+}
+
+@media (min-width: 900px) {
+  header {
+    min-height: 198px;
+  }
 }
 
 main {

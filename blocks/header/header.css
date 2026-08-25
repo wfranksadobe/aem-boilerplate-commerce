@@ -55,12 +55,22 @@ header:has(.uoa-header) {
   z-index: 4;
 }
 
-/* Size by width (the brand mark is a wide lockup); vertically centred in the band */
+/* Size by width (the brand mark is a wide lockup); vertically centred in the band.
+   aspect-ratio reserves the height immediately (logo viewBox 822:323) so the
+   logo doesn't reflow when its SVG loads — avoids a small layout shift. */
 .uoa-header .nav-brand .icon,
 .uoa-header .nav-brand img {
   width: 168px;
   height: auto;
+  aspect-ratio: 822 / 323;
   display: block;
+}
+
+/* The icon token renders an <img> inside the .icon span; make it fill the
+   reserved box so it doesn't start at the default 16px and reflow. */
+.uoa-header .nav-brand .icon img {
+  width: 100%;
+  height: 100%;
 }
 
 /* stylelint-disable-next-line no-descending-specificity */
