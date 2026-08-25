@@ -14,9 +14,10 @@
   position: relative;
   margin: 0;
 
-  /* Left padding (56px) makes room for the oversized opening mark so the quote
-     text aligns to a consistent left edge; top padding clears the mark. */
-  padding: 78px 0 0 56px;
+  /* Side padding reserves the gutters where the decorative marks sit: the
+     opening mark hangs in the left gutter (top-aligned with the first line),
+     the closing mark in the bottom-right (after the last line). */
+  padding: 8px 64px 44px;
   font-family: inter, sans-serif;
   font-size: 22px;
   font-style: normal; /* override the global italic blockquote style */
@@ -26,49 +27,45 @@
   color: #4a4a4c;
 }
 
-/* Suppress the global blockquote curly-quote pseudo-mark on paragraphs; we draw
-   our own oversized decorative marks instead. (The closing mark is defined on
-   p:last-of-type::after below.) */
-.quote .quote-text p::before {
+/* Suppress the global blockquote curly-quote pseudo-marks; we draw our own
+   oversized decorative marks on the blockquote instead. */
+.quote .quote-text p::before,
+.quote .quote-text p::after {
   content: none;
-}
-
-.quote .quote-text p:not(:last-of-type)::after {
-  content: none;
-}
-
-/* Oversized decorative opening quotation mark — sits top-left, its glyph body
-   aligned to where the quote text begins (135px Inter, matching the source). */
-.quote .quote-text::before {
-  content: open-quote;
-  position: absolute;
-  top: 74px;
-  left: 0;
-  font-family: inter, sans-serif;
-  font-size: 135px;
-  line-height: 0;
-  color: #cecedb;
 }
 
 .quote .quote-text p {
   margin: 0;
 }
 
-/* Oversized decorative closing quotation mark, trailing the last line inline so
-   it reads as the end of the quote (never on its own line). */
-.quote .quote-text p:last-of-type::after {
-  content: close-quote;
-  margin-left: 4px;
-  font-family: inter, sans-serif;
-  font-size: 135px;
-  line-height: 0;
-  vertical-align: -0.62em;
+/* Decorative marks — Georgia gives the solid "66"/"99" shapes. Each is
+   absolutely positioned into a corner of the quote text. */
+.quote .quote-text::before,
+.quote .quote-text::after {
+  position: absolute;
+  font-family: georgia, "Times New Roman", serif;
+  font-size: 80px;
+  line-height: 1;
   color: #cecedb;
+}
+
+/* Opening mark: top-left gutter, top-aligned with the first line. */
+.quote .quote-text::before {
+  content: open-quote;
+  top: -10px;
+  left: 0;
+}
+
+/* Closing mark: bottom-right, trailing the last line. */
+.quote .quote-text::after {
+  content: close-quote;
+  right: 8px;
+  bottom: 0;
 }
 
 .quote .quote-attribution {
   margin: 35px 0 0;
-  padding: 0 14px 0 56px;
+  padding: 0 14px 0 64px;
   font-family: inter, sans-serif;
   font-size: 16px;
   line-height: 1.69;
