@@ -24,9 +24,9 @@ indices:
         value: |
           attribute(el, 'content')
       tags:
-        select: head > meta[name="tags"]
+        select: head > meta[property="article:tag"]
         values: |
-          match(attribute(el, 'content'), '([^,]+)')
+          attribute(el, 'content')
       tagPaths:
         select: head > meta[name="tag-paths"]
         values: |
