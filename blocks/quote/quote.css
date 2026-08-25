@@ -14,10 +14,10 @@
   position: relative;
   margin: 0;
 
-  /* Side padding reserves the gutters where the decorative marks sit: the
-     opening mark hangs in the left gutter (top-aligned with the first line),
-     the closing mark in the bottom-right (after the last line). */
-  padding: 8px 64px 44px;
+  /* Side padding reserves the gutters where the oversized (135px) decorative
+     marks sit: the opening mark hangs in the left gutter (top-aligned with the
+     first line), the closing mark in the bottom-right (after the last line). */
+  padding: 8px 70px 40px;
   font-family: inter, sans-serif;
   font-size: 22px;
   font-style: normal; /* override the global italic blockquote style */
@@ -38,21 +38,22 @@
   margin: 0;
 }
 
-/* Decorative marks — Georgia gives the solid "66"/"99" shapes. Each is
-   absolutely positioned into a corner of the quote text. */
+/* Decorative marks — 135px Inter, matching the source exactly. Each is
+   absolutely positioned into a corner of the quote text. line-height:0 keeps
+   the tall glyph box from pushing the positioning around. */
 .quote .quote-text::before,
 .quote .quote-text::after {
   position: absolute;
-  font-family: georgia, "Times New Roman", serif;
-  font-size: 80px;
-  line-height: 1;
+  font-family: inter, sans-serif;
+  font-size: 135px;
+  line-height: 0;
   color: #cecedb;
 }
 
-/* Opening mark: top-left gutter, top-aligned with the first line. */
+/* Opening mark: top-left gutter, its glyph top-aligned with the first line. */
 .quote .quote-text::before {
   content: open-quote;
-  top: -10px;
+  top: 60px;
   left: 0;
 }
 
@@ -60,7 +61,7 @@
 .quote .quote-text::after {
   content: close-quote;
   right: 8px;
-  bottom: 0;
+  bottom: 30px;
 }
 
 .quote .quote-attribution {
