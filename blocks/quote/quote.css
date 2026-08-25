@@ -39,34 +39,37 @@
   margin: 0;
 }
 
-/* Decorative marks — 135px Inter, matching the source. line-height must stay
-   at (or above) 1: a collapsed line box (e.g. 27px on a 135px glyph) slices the
-   top off the opening mark and the bottom off the closing mark, which looks
-   like the marks are "partially hidden". A full line box renders each glyph
-   whole. The marks are positioned in the gutters around the text. */
+/* Decorative marks are drawn as fixed-size SVG background images rather than
+   font glyphs. A font character depends on line-height and on which font
+   actually loads — a collapsed line box or a fallback font clips the glyph and
+   makes it look "partially hidden". An SVG in a fixed 60x48 box cannot be
+   clipped by line-height and renders identically on every machine. The marks
+   sit in the gutters (behind the text at z-index:0, but they never reach the
+   text column so they never overlap it). */
 .quote .quote-text::before,
 .quote .quote-text::after {
+  content: "";
   position: absolute;
-  z-index: 2;
-  height: 135px;
-  font-family: inter, sans-serif;
-  font-size: 135px;
-  line-height: 1;
-  color: #cecedb;
+  z-index: 0;
+  width: 60px;
+  height: 48px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
-/* Opening mark: top-left, sitting above the first line in the gutter. */
+/* Opening mark: two filled "66" commas, top-left in the gutter above the text. */
 .quote .quote-text::before {
-  content: open-quote;
-  top: -18px;
-  left: -8px;
+  top: 8px;
+  left: -4px;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 48" fill="%23cecedb"%3E%3Cpath d="M0 48V26C0 11.6 9.6 1.9 24 0l2.4 8.6C17.8 10.6 13 16 12.6 24H26v24zM34 48V26C34 11.6 43.6 1.9 58 0l2.4 8.6C51.8 10.6 47 16 46.6 24H60v24z"/%3E%3C/svg%3E');
 }
 
-/* Closing mark: bottom-right, hanging below the last line. */
+/* Closing mark: two filled "99" commas (rotated 180°), bottom-right below the text. */
 .quote .quote-text::after {
-  content: close-quote;
-  right: 0;
-  bottom: -70px;
+  right: -4px;
+  bottom: -8px;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 48" fill="%23cecedb"%3E%3Cg transform="rotate(180 30 24)"%3E%3Cpath d="M0 48V26C0 11.6 9.6 1.9 24 0l2.4 8.6C17.8 10.6 13 16 12.6 24H26v24zM34 48V26C34 11.6 43.6 1.9 58 0l2.4 8.6C51.8 10.6 47 16 46.6 24H60v24z"/%3E%3C/g%3E%3C/svg%3E');
 }
 
 .quote .quote-attribution {
