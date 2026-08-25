@@ -15,6 +15,8 @@ import {
   loadCommerceEager,
   loadCommerceLazy,
   initializeCommerce,
+  initializeCommerceDropins,
+  isCommercePage,
   applyTemplates,
   decorateLinks,
   loadErrorPage,
@@ -322,7 +324,12 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     try {
-      await initializeCommerce();
+      // Content (CMS) pages have no commerce blocks, so defer the commerce
+      // drop-in initialization (auth, cart, personalization, reCAPTCHA) out of
+      // the eager/LCP path — loadLazy() runs it. This keeps Total Blocking Time
+      // low on content pages. Commerce pages initialize eagerly as before.
+      window.hlx.deferCommerceDropins = !isCommercePage(doc);
+      await initializeCommerce({ initDropins: !window.hlx.deferCommerceDropins });
       decorateMain(main);
       applyTemplates(doc);
       await loadCommerceEager();
@@ -349,6 +356,13 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  // Run the commerce drop-in init that was deferred out of the eager phase on
+  // content pages (keeps eager TBT low). No-op on commerce pages, which already
+  // initialized eagerly.
+  if (window.hlx.deferCommerceDropins) {
+    initializeCommerceDropins();
+  }
+
   loadHeader(doc.querySelector('header'));
 
   const main = doc.querySelector('main');

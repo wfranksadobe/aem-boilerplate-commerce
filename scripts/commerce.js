@@ -318,9 +318,16 @@ export async function loadCommerceLazy() {
 }
 
 /**
- * Initializes commerce configuration
+ * Initializes commerce configuration and GraphQL endpoints.
+ * @param {object} [opts]
+ * @param {boolean} [opts.initDropins=true] When false, the commerce drop-ins
+ *   (auth, cart, personalization, reCAPTCHA) are NOT initialized here. This lets
+ *   content (CMS) pages, which have no commerce blocks, defer that work out of
+ *   the eager/LCP path to reduce Total Blocking Time. Commerce pages keep the
+ *   default (eager) behaviour. Call initializeDropins() later to complete setup.
+ * @returns {Promise<void>|undefined}
  */
-export async function initializeCommerce() {
+export async function initializeCommerce({ initDropins = true } = {}) {
   // Initialize Config
   initializeConfig(await getConfigFromSession());
 
@@ -332,6 +339,30 @@ export async function initializeCommerce() {
   CS_FETCH_GRAPHQL.setEndpoint(await commerceEndpointWithQueryParams());
   CS_FETCH_GRAPHQL.setFetchGraphQlHeaders((prev) => ({ ...prev, ...getHeaders('cs') }));
 
+  if (initDropins) return initializeDropins();
+  return undefined;
+}
+
+/**
+ * Whether the current page has any commerce blocks. Content pages (news,
+ * articles, etc.) have none, so commerce drop-in initialization can be deferred.
+ * @param {Element} [doc=document]
+ * @returns {boolean}
+ */
+export function isCommercePage(doc = document) {
+  return !!doc.querySelector(
+    'main .product-details, main .product-list-page, main .commerce-cart, '
+    + 'main .commerce-checkout, main [class^="commerce-"], main [class*=" commerce-"]',
+  );
+}
+
+/**
+ * Complete commerce drop-in initialization. Safe to call once; delegates to
+ * initializeDropins(). Used to run the deferred init on CMS pages in the lazy
+ * phase.
+ * @returns {Promise<void>}
+ */
+export async function initializeCommerceDropins() {
   return initializeDropins();
 }
 
