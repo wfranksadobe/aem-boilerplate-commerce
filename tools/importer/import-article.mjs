@@ -35,24 +35,31 @@ const esc = (s) => (s || '')
 
 /** Parse a source article URL into its date parts + slug. */
 function parseUrl(url) {
-  const m = url.match(/\/news\/(\d{4})\/(\d{2})\/(\d{2})\/([^/?#]+?)\.html/i);
+  // Slug is everything after the date up to `.html`; a few articles have a
+  // nested sub-page path (…/slug/subpage.html), so allow `/` in the slug and
+  // use only the final segment as the image-folder name.
+  const m = url.match(/\/news\/(\d{4})\/(\d{2})\/(\d{2})\/(.+?)\.html/i);
   if (!m) throw new Error(`Unrecognised news URL: ${url}`);
-  const [, year, month, day, slug] = m;
+  const [, year, month, day, slugPath] = m;
+  const slug = slugPath.split('/').pop();
   return {
-    year, month, day, slug, rel: `${year}/${month}/${day}/${slug}`,
+    year, month, day, slug, slugPath, rel: `${year}/${month}/${day}/${slugPath}`,
   };
 }
 
+/** Encode a URL so stray characters (e.g. a comma in the slug) don't break fetch. */
+const safeUrl = (u) => encodeURI(u).replace(/,/g, '%2C');
+
 /** Fetch a URL as text (with a browser-ish UA). */
 async function fetchText(url) {
-  const res = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 (migration-bot)' } });
+  const res = await fetch(safeUrl(url), { headers: { 'user-agent': 'Mozilla/5.0 (migration-bot)' } });
   if (!res.ok) throw new Error(`GET ${url} -> ${res.status}`);
   return res.text();
 }
 
 /** Fetch a URL as a Buffer. */
 async function fetchBuffer(url) {
-  const res = await fetch(url, { headers: { 'user-agent': 'Mozilla/5.0 (migration-bot)' } });
+  const res = await fetch(safeUrl(url), { headers: { 'user-agent': 'Mozilla/5.0 (migration-bot)' } });
   if (!res.ok) throw new Error(`GET ${url} -> ${res.status}`);
   return Buffer.from(await res.arrayBuffer());
 }
@@ -66,7 +73,14 @@ function bestImageUrl(pictureEl) {
   const urls = [];
   pictureEl.querySelectorAll('source').forEach((s) => {
     const ss = s.getAttribute('srcset');
-    if (ss) urls.push(...ss.split(',').map((x) => x.trim().split(/\s+/)[0]));
+    if (!ss) return;
+    // A srcset is comma-separated, but URLs here can themselves contain commas.
+    // Split only on a comma that precedes a new candidate (optional descriptor
+    // then a URL-looking token starting with "/" or "http").
+    ss.split(/,(?=\s*(?:\/|https?:))/).forEach((cand) => {
+      const u = cand.trim().split(/\s+/)[0];
+      if (u) urls.push(u);
+    });
   });
   const img = pictureEl.querySelector('img');
   if (img?.getAttribute('src')) urls.push(img.getAttribute('src'));
