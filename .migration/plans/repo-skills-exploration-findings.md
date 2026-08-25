@@ -1,109 +1,122 @@
-# University of Auckland — Navigation & Footer Migration Plan
-
-## Status: Approved — blocked by active Plan mode (Execute mode not yet registered)
-
-The plan is approved and I'm ready. However, **the harness still reports Plan mode active**, so every file write and command has been blocked (I've now attempted the first action — writing `.agents/settings.json` — twice, both denied by the plan-mode guard). This isn't something I can override from my side: Execute mode is a toggle you confirm in the UI (typically by accepting the plan when prompted, or the mode selector). Once it actually registers, no further input is needed — I'll proceed automatically through Phase 0 → G.
-
-**What will happen the instant Execute mode is live:**
-1. Write `.agents/settings.json` → `{"enabledPlugins": {"excat-commerce@excat-extended": true}}`
-2. Session auto-reinitializes; the `excat` orchestrator skills load
-3. Begin Phase A (scrape + capture the UoA header/footer)
+# University of Auckland — News Article Migration & Dynamic Tag Feeds Plan
 
 ## Goal
 
-Replicate the **header/navigation and footer** of the University of Auckland News & Opinion site (`https://www.auckland.ac.nz/en/news.html`) into this EDS project — pixel-matched fonts and colours, exact logos, full 1st- and 2nd-level nav, matching dropdown behaviour, fully responsive across mobile/tablet/desktop — and set up a **multi-language taxonomy** for future translations. This first phase covers **nav + footer only** (no body/article content).
+Establish a repeatable way to **author and migrate news articles** into this EDS project, and build **dynamic, tag-driven sections** on the news index that auto-populate from those articles. This phase delivers:
 
-## Decisions (confirmed with you)
+1. A repeatable **article page pattern** at `/content/nz/en/news/yyyy/mm/dd/article-name.html`, carrying **date** and **tags** in metadata.
+2. Migration of **two real articles** (Safeguarding infant formula exports; Award-winning Pacific educator) at **full fidelity**.
+3. A **query index** that exposes article date + tags for querying.
+4. A reusable **tag-feed block** that loads the latest N articles for a given tag, applied to the **"Sustainable impact"** section on `/content/nz/en/news/index.html` as the working proof.
 
-- **Plugin:** Enable **`excat-commerce@excat-extended`** (approved).
-- **Languages:** Multi-language-ready taxonomy now, **English (`/en/`) as the only populated locale**; `/mi/`, `/zh/`, `/ko/`, `/ja/`, etc. addable later with zero rework.
-- **Fonts:** Use the **exact UoA brand font files** for a pixel-exact match. ⚠️ **Licensing gate** — identify the typeface, check redistribution/web-embedding rights, confirm with you before committing; fall back to closest licence-free match if rights are unclear.
-- **Secondary (2nd-level) nav links:** Absolute `auckland.ac.nz` URLs for now.
-- **Migration approach:** Header/footer handled by the dedicated `excat` navigation & footer orchestrators (screenshot evidence + per-element hover/click mapping + appearance validation), not `page-import`.
+## Confirmed decisions
+
+- **Section scope (this phase):** Only the **"Sustainable impact"** section is wired to a live tag feed. Other category sections + Feature Article come later (the block is built to be reused for them).
+- **Tag model:** Store **both** a display **label** (e.g. "Sustainable impact") and the source **hierarchical path** (e.g. `news:communications-team/sustainable-impact`). Matching/querying is done on the label; the path is retained in metadata for future linking to source tag pages.
+- **Article body fidelity:** **Full** — intro, figures/captions, pull-quote blockquotes, PDF download links, subheadings, and the media-contact block.
+
+## How this works (architecture)
+
+**1. Article as a page + metadata.** Each article is a normal EDS page. Its date and tags live in a page **metadata** block (rendered into `<meta>` tags in `<head>`), exactly like the existing Title/Description on the index page. Proposed metadata keys:
+- `Publication Date` → `2026-08-20` (ISO, sortable) — plus a human display date derived at render time.
+- `Tags` → comma-separated **labels** (e.g. `Sustainable impact, Health and medicine, Communications Team`).
+- `Tag Paths` → comma-separated source **paths** (kept for future use; not used for matching now).
+- `Image` (og:image) → article hero/thumbnail for cards.
+
+**2. Query index (`helix-query.yaml`).** Add a **news index** scoped to `/nz/en/news/**` that extracts `title`, `image`, `description`, `publicationDate`, and `tags` from each article's `<head>`. AEM generates a `query-index.json` that the tag-feed block fetches. (Repo currently has only `default-query.yaml` for sitemap/enrichment — we add a news index there.)
+
+**3. Tag-feed block (`blocks/news-feed`).** A new block authored on the index page. Content model (per section):
+- **Tag** — the label to match (e.g. "Sustainable impact").
+- **Count** — how many articles (default 3).
+- **Heading / Link** — section title + optional "see more" link (matches source).
+
+At runtime it fetches the news `query-index.json`, filters entries whose `tags` include the configured Tag, sorts by `publicationDate` **descending**, takes the top N, and renders article cards (image, title, date, teaser) styled to match the source layout.
+
+**4. Section styling.** The rendered cards match the source's section pattern (heading, 3-across cards on desktop, stacked on mobile, "See more" affordance).
 
 ## Scope
 
-**In scope (this phase):**
-- ✅ Header: logo(s), 1st-level nav items, 2nd-level dropdown/megamenu items + behaviour, search affordance if present
-- ✅ Footer: logos, all link columns, legal/social, colours & fonts
-- ✅ Exact colour palette + typography (design tokens in `styles.css`)
-- ✅ Responsive behaviour at all breakpoints (mobile hamburger, tablet, desktop)
-- ✅ Multi-language folder taxonomy + `hreflang`/metadata scaffolding (English populated)
+**In scope:**
+- ✅ Article authoring pattern + metadata model (date, tags label+path)
+- ✅ Migrate 2 articles at full fidelity into `/content/nz/en/news/yyyy/mm/dd/…`
+- ✅ `helix-query.yaml` news index (date + tags queryable)
+- ✅ `news-feed` block (fetch → filter by tag → sort by date → render N cards)
+- ✅ Wire the **Sustainable impact** section on the index to the block
+- ✅ Responsive + accessible + lint-clean; verified on local preview
 
-**Out of scope (later phases):**
-- ❌ Article/news body content, listing pages, PDP/PLP
-- ❌ Actual translated content (only the taxonomy is built now)
-- ❌ Removing the temporary links back to auckland.ac.nz
+**Out of scope (later):**
+- ❌ Wiring the remaining category sections + Feature Article (block will support them)
+- ❌ A full news listing/search page (`list.html?tag=…` equivalent)
+- ❌ Live tag pages / clickable tag filtering destinations
+- ❌ Automatic sitewide `query-index` publishing config beyond the news index
 
 ## Approach & Phases
 
-### Phase 0 — Enable plugin (first Execute-mode action)
-0. Write `.agents/settings.json` = `{"enabledPlugins": {"excat-commerce@excat-extended": true}}`. Session auto-reinitializes; orchestrator skills load.
+### Phase A — Capture source articles
+1. Scrape both article URLs: DOM, computed styles, images, exact date + tag list, body structure (figures, pull-quotes, PDF links, media contact).
+2. Record the index page's "Sustainable impact" section layout (card grid, spacing, typography, "See more").
 
-### Phase A — Capture the source (read/scrape)
-1. Scrape `https://www.auckland.ac.nz/en/news.html` — header + footer DOM, computed CSS, colours, font-family declarations, logo assets (SVG/PNG), full nav tree.
-2. Playwright: record hover/click behaviour of 1st-level items (dropdown/megamenu open, timing, focus) + screenshots at mobile/tablet/desktop.
-3. Enumerate every nav item (1st + 2nd level) with destination URL, and every footer link/column.
+### Phase B — Define the content model
+3. Finalise metadata keys (`Publication Date`, `Tags`, `Tag Paths`, `Image`) and the article section structure (breadcrumb → title → date/tags → body → media contact). Reuse the existing `breadcrumb` block; identify which body pieces map to default content vs. blocks (blockquote/pull-quote, figure, PDF link list).
+4. Decide any new small blocks needed for full-fidelity body (e.g. a `pullquote` block) vs. plain markup.
 
-### Phase B — Extract design tokens & fonts
-4. Extract exact colours, spacing, typography into CSS custom properties in `styles/styles.css`.
-5. Identify brand typeface → **licensing check → confirm with you** → add font files to `fonts/` + declarations to `styles/fonts.css` (or fallback).
+### Phase C — Query infrastructure
+5. Add the **news index** to `helix-query.yaml` (properties: title, image, description, publicationDate, tags). Document how AEM builds `query-index.json` and how the block consumes it.
 
-### Phase C — Taxonomy & content model
-6. Design multi-language folder taxonomy (`/en/` now; `/{lang}/` siblings later) + `hreflang`/language metadata convention; document per-locale nav/footer fragment locations.
-7. Author English nav + footer fragments (`nav.plain.html` / `footer.plain.html`); 2nd-level links → absolute auckland.ac.nz URLs.
+### Phase D — Build the `news-feed` block
+6. `blocks/news-feed/news-feed.js` + `.css` + `_news-feed.json` (Tag, Count, Heading, Link fields).
+7. Fetch + filter-by-tag + sort-by-date-desc + top-N; render cards; graceful empty/loading states; align to content column.
+8. Match the source section styling responsively.
 
-### Phase D — Implement header block
-8. Implement/adapt `header` block JS + CSS: logo, 1st-level items, dropdown/megamenu, mobile hamburger; match open/close behaviour + transitions.
-9. Iterate responsively at every breakpoint against captured screenshots.
+### Phase E — Migrate the two articles
+9. Build full-fidelity article HTML (with metadata blocks) via the project's import/bundling flow — **not** hand-edited into `content/` — then upload to DA and sync local cache, following the established DA workflow.
+10. Verify each article renders (breadcrumb, date, tags, body, figures, quotes, PDF links, media contact).
 
-### Phase E — Implement footer block
-10. Implement/adapt `footer` block JS + CSS: logos, link columns, legal/social, colours, fonts; match layout at every breakpoint.
+### Phase F — Wire the index section
+11. Author the `news-feed` block into the index page's "Sustainable impact" section (Tag = "Sustainable impact", Count = 3); upload to DA; sync.
+12. Confirm it auto-lists the two tagged articles newest-first (and would show 3 once more exist).
 
-### Phase F — Validate
-11. Visual-critique header + footer vs. original at mobile/tablet/desktop — fonts, colours, spacing, dropdown behaviour, 2nd-level link targets.
-12. Accessibility pass (heading hierarchy, ARIA on nav/menu, keyboard, focus states), console-error check, `npm run lint`.
-13. Confirm taxonomy renders and `hreflang`/metadata scaffolding is correct.
+### Phase G — Validate & ship
+13. Visual-critique articles + index section vs. source (mobile/tablet/desktop).
+14. Accessibility (headings, ARIA, keyboard), console-error check, `npm run lint`.
+15. Commit + push; PR with feature-preview links; `gh pr checks` / PageSpeed.
 
-### Phase G — Ship
-14. Push feature branch, PR with preview links, run `gh pr checks` / PageSpeed on feature preview.
+## Key files
 
-## Skills / Tooling
+- `helix-query.yaml` *(new)* — news query index
+- `blocks/news-feed/{news-feed.js,news-feed.css,_news-feed.json}` *(new)*
+- `blocks/pullquote/…` *(new, if pull-quotes are a block rather than markup)*
+- `models/_component-definition.json` + regenerated `component-*.json` — register new block(s)
+- Content (via DA, then local `content/` sync): 2 article pages + updated `index.html`
 
-- `excat:excat-navigation-orchestrator` — header/nav instrumentation
-- `excat:excat-footer-orchestrator` — footer migration
-- `excat:excat-visual-critique` — appearance comparison vs. original
-- `scrape-webpage` / Playwright MCP — source capture + behaviour recording
-- `building-blocks`, `content-modeling`, `testing-blocks`, `code-review` — implementation + QA
-- `da-content` / `da-auth` — pushing fragments to DA if authored programmatically
+## Risks & open items
 
-## Risks & Open Items
-
-- **Execute mode not registering** — current blocker; the toggle must take effect in the harness before any file write succeeds.
-- **Font licensing** — resolved via the Phase B confirmation gate.
-- The megamenu may be a sidebar+right-panel pattern — nav orchestrator handles via per-item Playwright hover (no structure assumptions).
-- Multi-language URL convention (`/en/…` prefix vs. root) finalized in Phase C, shown to you before authoring.
+- **Query-index availability locally.** `query-index.json` is generated by AEM's indexing; the local dev server may not build it from `helix-query.yaml`. Mitigation: the block reads a standard `query-index.json`; for local verification we may need to preview via admin to generate it, or temporarily point the block at a small static fixture. Confirmed as a verification step, not a design change.
+- **Date sorting reliability.** Relies on ISO `Publication Date` in metadata; the folder path (`yyyy/mm/dd`) is a secondary fallback for ordering.
+- **Tag matching.** Case/whitespace-insensitive label match; labels must be authored consistently (the `Tags` metadata is the source of truth).
+- **Full-fidelity body blocks.** Pull-quotes / figures / PDF-link lists may need a small new block or agreed default-content markup — decided in Phase B before building.
+- **Content editing rule.** All content changes go through the import/bundling + DA upload flow, never hand-edited in `content/`.
 
 ## Checklist
 
-- [ ] **Execute mode active in harness** (unblocks all writes/commands) — prerequisite
-- [ ] **Enable `excat-commerce` plugin** (write `.agents/settings.json`) — first Execute-mode action
-- [ ] Scrape source header + footer DOM, CSS, logos, and full nav tree
-- [ ] Record 1st-level dropdown hover/click behaviour + capture screenshots (mobile/tablet/desktop)
-- [ ] Enumerate all nav items (1st + 2nd level) with destination URLs and all footer links
-- [ ] Extract exact colour palette + typography into design tokens (`styles.css`)
-- [ ] Identify brand typeface, run licensing check, confirm with user, add font files (or fallback)
-- [ ] Design multi-language taxonomy + `hreflang`/metadata scaffolding (English populated, others ready)
-- [ ] Author English nav + footer content fragments (2nd-level → auckland.ac.nz links)
-- [ ] Implement header block (logo, 1st/2nd-level, megamenu, mobile hamburger, matching behaviour)
-- [ ] Implement footer block (logos, columns, legal/social, colours, fonts)
-- [ ] Responsive verification of header + footer at all breakpoints
-- [ ] Visual-critique nav + footer vs. original (fonts, colours, spacing, dropdown behaviour)
+- [ ] Scrape both source articles (DOM, styles, images, date, tags, body structure)
+- [ ] Capture the index "Sustainable impact" section layout + card styling
+- [ ] Finalise article metadata model (Publication Date, Tags label, Tag Paths, Image)
+- [ ] Define full-fidelity article section structure; decide body blocks vs. markup (pull-quote, figure, PDF links, media contact)
+- [ ] Add news index to `helix-query.yaml` (title, image, description, publicationDate, tags)
+- [ ] Build `news-feed` block JS/CSS/model (Tag, Count, Heading, Link)
+- [ ] Implement fetch → filter-by-tag → sort-by-date-desc → top-N → render cards, with empty/loading states
+- [ ] Style the feed section to match source, responsive at all breakpoints
+- [ ] Register new block(s) in component definition/models/filters
+- [ ] Migrate article 1 (Safeguarding infant formula exports) at full fidelity via import flow → DA → local sync
+- [ ] Migrate article 2 (Award-winning Pacific educator) at full fidelity via import flow → DA → local sync
+- [ ] Verify both articles render fully (breadcrumb, date, tags, body, figures, quotes, PDF, media contact)
+- [ ] Wire the index "Sustainable impact" section to `news-feed` (Tag="Sustainable impact", Count=3) via DA → local sync
+- [ ] Confirm the section auto-lists tagged articles newest-first
+- [ ] Visual-critique articles + index section vs. source (mobile/tablet/desktop)
 - [ ] Accessibility + console + `npm run lint` pass
-- [ ] Verify 2nd-level links resolve to the university site
-- [ ] Verify language taxonomy + hreflang scaffolding renders correctly
-- [ ] Push branch + open PR with preview links; run PR/PSI checks
+- [ ] Commit + push; open PR with preview links; run PR/PSI checks
 
 ---
 
-**To proceed:** the plan is approved. The only remaining blocker is that **Plan mode is still enforced by the harness** — please confirm the Execute-mode switch (accept/exit plan mode in the UI). The moment it registers, I'll write `.agents/settings.json`, reinitialize, and start Phase A automatically.
+**Note:** This artifact is the plan only. Executing it (scraping, creating blocks/files, editing `helix-query.yaml`, uploading to DA) requires **Execute mode** — approve the plan to switch over and I'll start with Phase A.

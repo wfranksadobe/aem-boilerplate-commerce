@@ -51,6 +51,9 @@
           "...": "../blocks/hero/_*.json#/definitions"
         },
         {
+          "...": "../blocks/news-feed/_*.json#/definitions"
+        },
+        {
           "...": "../blocks/targeted-block/_*.json#/definitions"
         },
         {

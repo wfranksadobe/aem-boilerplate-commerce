@@ -74,6 +74,10 @@ async function buildTrail(depth) {
   rest.forEach((seg, i) => {
     acc = [...acc, seg];
     const isCurrent = i === rest.length - 1;
+    // Skip purely-numeric path segments (e.g. the yyyy/mm/dd folders in article
+    // URLs) — they are structural, not navigable pages. Keep them in `acc` so
+    // deeper crumb URLs stay correct.
+    if (!isCurrent && /^\d+$/.test(seg)) return;
     trail.push({
       label: prettify(seg),
       url: isCurrent ? null : `/${acc.join('/')}`,
