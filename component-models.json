@@ -501,19 +501,40 @@
     "fields": [
       {
         "component": "text",
-        "name": "heading",
+        "name": "title",
         "value": "Media contact",
-        "label": "Heading",
+        "label": "Block title",
         "valueType": "string"
       },
       {
-        "component": "richtext",
-        "name": "details",
+        "component": "text",
+        "name": "name",
         "value": "",
-        "label": "Details",
+        "label": "Name",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "role",
+        "value": "",
+        "label": "Role",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "mobile",
+        "value": "",
+        "label": "Mobile number",
         "valueType": "string",
-        "required": true,
-        "description": "Contact name, phone and email."
+        "description": "Rendered with an \"M:\" prefix."
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "value": "",
+        "label": "Email address",
+        "valueType": "string",
+        "description": "Rendered with an \"E:\" prefix as a mailto link."
       }
     ]
   },
@@ -610,12 +631,20 @@
         "required": true
       },
       {
-        "component": "richtext",
-        "name": "attribution",
+        "component": "text",
+        "name": "who",
         "value": "",
-        "label": "Attribution",
+        "label": "Who",
         "valueType": "string",
-        "description": "First line: name (shown bold). Second line: organisation."
+        "description": "The name of the person quoted (shown bold)."
+      },
+      {
+        "component": "text",
+        "name": "position",
+        "value": "",
+        "label": "Position",
+        "valueType": "string",
+        "description": "Their role or organisation."
       }
     ]
   },

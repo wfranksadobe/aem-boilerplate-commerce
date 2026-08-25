@@ -284,16 +284,28 @@
           "plugins": {
             "da": {
               "name": "media-contact",
-              "rows": 2,
+              "rows": 5,
               "columns": 0,
               "fields": [
                 {
-                  "name": "heading",
+                  "name": "title",
                   "selector": "div:nth-child(1)"
                 },
                 {
-                  "name": "details",
+                  "name": "name",
                   "selector": "div:nth-child(2)"
+                },
+                {
+                  "name": "role",
+                  "selector": "div:nth-child(3)"
+                },
+                {
+                  "name": "mobile",
+                  "selector": "div:nth-child(4)"
+                },
+                {
+                  "name": "email",
+                  "selector": "div:nth-child(5)"
                 }
               ]
             }
@@ -332,7 +344,7 @@
           "plugins": {
             "da": {
               "name": "quote",
-              "rows": 2,
+              "rows": 3,
               "columns": 0,
               "fields": [
                 {
@@ -340,8 +352,12 @@
                   "selector": "div:nth-child(1)"
                 },
                 {
-                  "name": "attribution",
+                  "name": "who",
                   "selector": "div:nth-child(2)"
+                },
+                {
+                  "name": "position",
+                  "selector": "div:nth-child(3)"
                 }
               ]
             }
