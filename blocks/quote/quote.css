@@ -13,7 +13,10 @@
 .quote .quote-text {
   position: relative;
   margin: 0;
-  padding: 30px 56px 0;
+
+  /* Top padding leaves room for the large opening mark; side padding keeps the
+     oversized marks from being clipped at the block edges. */
+  padding: 56px 56px 0;
   font-family: inter, sans-serif;
   font-size: 22px;
   font-style: normal; /* override the global italic blockquote style */
@@ -23,27 +26,40 @@
   color: #4a4a4c;
 }
 
-/* Suppress the global blockquote curly-quote pseudo-marks; we use one big
-   decorative opening mark instead. */
+/* Suppress the global blockquote curly-quote pseudo-marks; we draw our own
+   oversized decorative marks instead. */
 .quote .quote-text p::before,
 .quote .quote-text p::after {
   content: none;
 }
 
-/* Oversized decorative opening quotation mark. */
+/* Oversized decorative opening quotation mark (top-left, fully in view). */
 .quote .quote-text::before {
   content: open-quote;
   position: absolute;
-  top: 50px;
-  left: -8px;
-  font-family: inter, sans-serif;
-  font-size: 135px;
+  top: 62px;
+  left: 4px;
+  font-family: georgia, "Times New Roman", serif;
+  font-size: 90px;
   line-height: 0;
   color: #cecedb;
 }
 
 .quote .quote-text p {
   margin: 0;
+}
+
+/* Oversized decorative closing quotation mark, trailing the quote text on its
+   own line so it never overlaps the final words. */
+.quote .quote-text::after {
+  content: close-quote;
+  display: block;
+  height: 24px;
+  margin-top: 4px;
+  font-family: georgia, "Times New Roman", serif;
+  font-size: 90px;
+  line-height: 0.5;
+  color: #cecedb;
 }
 
 .quote .quote-attribution {

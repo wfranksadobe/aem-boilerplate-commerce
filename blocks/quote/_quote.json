@@ -7,11 +7,12 @@
       "plugins": {
         "da": {
           "name": "quote",
-          "rows": 2,
+          "rows": 3,
           "columns": 0,
           "fields": [
             { "name": "quote", "selector": "div:nth-child(1)" },
-            { "name": "attribution", "selector": "div:nth-child(2)" }
+            { "name": "who", "selector": "div:nth-child(2)" },
+            { "name": "position", "selector": "div:nth-child(3)" }
           ]
         }
       }
@@ -30,12 +31,20 @@
           "required": true
         },
         {
-          "component": "richtext",
-          "name": "attribution",
+          "component": "text",
+          "name": "who",
           "value": "",
-          "label": "Attribution",
+          "label": "Who",
           "valueType": "string",
-          "description": "First line: name (shown bold). Second line: organisation."
+          "description": "The name of the person quoted (shown bold)."
+        },
+        {
+          "component": "text",
+          "name": "position",
+          "value": "",
+          "label": "Position",
+          "valueType": "string",
+          "description": "Their role or organisation."
         }
       ]
     }

@@ -12,7 +12,7 @@ body.news-article main > .section.media-contact-container > .media-contact-wrapp
 body.news-article main > .section.annotated-image-container > .annotated-image-wrapper {
   max-width: 652px;
   margin-right: auto;
-  margin-left: 0;
+  margin-left: auto;
 }
 
 /* Article title — InterDisplay 40/48 semibold navy (matches source h1). */
