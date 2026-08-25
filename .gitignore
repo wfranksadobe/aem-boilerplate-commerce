@@ -23,3 +23,6 @@ scripts/__dropins__/**/*.map
 migration-work/navigation-validation/
 migration-work/footer-validation/
 tools/importer/.progress/
+
+# Full images archive — committed as split parts under exports/parts/ instead
+exports/uoa-news-images.tar
