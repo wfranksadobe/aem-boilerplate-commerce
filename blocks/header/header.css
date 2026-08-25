@@ -11,7 +11,7 @@ header:has(.uoa-header) {
 .uoa-header {
   --uoa-navy: #0c0c48;
   --uoa-blue: #1f2bd4;
-  --uoa-light-blue: #71cfeb;
+  --uoa-light-blue: #00caef;
   --uoa-grey: #4a4a4c;
   --uoa-white: #fff;
 
@@ -309,9 +309,17 @@ header:has(.uoa-header) {
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--uoa-light-blue);
   color: var(--uoa-white);
+}
+
+/* Short accent rule under each heading — 50px wide, 1px, cyan, matching the
+   source (not a full-width border). */
+.uoa-header .megamenu-heading::after {
+  content: "";
+  display: block;
+  width: 50px;
+  margin-top: 12px;
+  border-bottom: 1px solid var(--uoa-light-blue);
 }
 
 .uoa-header .megamenu-heading a {
