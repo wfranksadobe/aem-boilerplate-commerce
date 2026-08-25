@@ -51,25 +51,25 @@
   content: "";
   position: absolute;
   z-index: 0;
-  width: 60px;
-  height: 48px;
+  width: 48px;
+  height: 37px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 }
 
-/* Opening mark: two filled "66" commas, top-left in the gutter above the text. */
+/* Opening mark: two rounded "66" commas, top-left in the gutter above the text. */
 .quote .quote-text::before {
   top: 8px;
   left: -4px;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 48" fill="%23cecedb"%3E%3Cpath d="M0 48V26C0 11.6 9.6 1.9 24 0l2.4 8.6C17.8 10.6 13 16 12.6 24H26v24zM34 48V26C34 11.6 43.6 1.9 58 0l2.4 8.6C51.8 10.6 47 16 46.6 24H60v24z"/%3E%3C/svg%3E');
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 40" fill="%23cecedb"%3E%3Cg transform="rotate(180 27 20)"%3E%3Cpath d="M26 13C26 5.8 20.2 0 13 0S0 5.8 0 13s5.8 13 13 13c1.8 0 3.6-.4 5.2-1.1-1.4 7.2-7.1 12.7-15.2 15.2L4.6 40C15.7 36.6 26 27.6 26 15z"/%3E%3Cpath d="M54 13c0-7.2-5.8-13-13-13s-13 5.8-13 13 5.8 13 13 13c1.8 0 3.6-.4 5.2-1.1-1.4 7.2-7.1 12.7-15.2 15.2l1.6 1.9C43.7 36.6 54 27.6 54 15z"/%3E%3C/g%3E%3C/svg%3E');
 }
 
-/* Closing mark: two filled "99" commas (rotated 180°), bottom-right below the text. */
+/* Closing mark: two rounded "99" commas, bottom-right below the text. */
 .quote .quote-text::after {
   right: -4px;
   bottom: -8px;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 48" fill="%23cecedb"%3E%3Cg transform="rotate(180 30 24)"%3E%3Cpath d="M0 48V26C0 11.6 9.6 1.9 24 0l2.4 8.6C17.8 10.6 13 16 12.6 24H26v24zM34 48V26C34 11.6 43.6 1.9 58 0l2.4 8.6C51.8 10.6 47 16 46.6 24H60v24z"/%3E%3C/g%3E%3C/svg%3E');
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 40" fill="%23cecedb"%3E%3Cpath d="M26 13C26 5.8 20.2 0 13 0S0 5.8 0 13s5.8 13 13 13c1.8 0 3.6-.4 5.2-1.1-1.4 7.2-7.1 12.7-15.2 15.2L4.6 40C15.7 36.6 26 27.6 26 15z"/%3E%3Cpath d="M54 13c0-7.2-5.8-13-13-13s-13 5.8-13 13 5.8 13 13 13c1.8 0 3.6-.4 5.2-1.1-1.4 7.2-7.1 12.7-15.2 15.2l1.6 1.9C43.7 36.6 54 27.6 54 15z"/%3E%3C/svg%3E');
 }
 
 .quote .quote-attribution {
