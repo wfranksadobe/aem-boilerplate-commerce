@@ -39,25 +39,26 @@
   margin: 0;
 }
 
-/* Decorative marks — 135px Inter with a collapsed 27px line box, exactly like
-   the source. A 135px quote glyph is wider than the 56px gutter, so its inner
-   edge crosses into the text column; drawing the marks IN FRONT (z-index:2)
-   means that inner edge is never painted over by the text. The marks are a pale
-   grey, so overlapping the text edge stays perfectly legible. */
+/* Decorative marks — 135px Inter, matching the source. line-height must stay
+   at (or above) 1: a collapsed line box (e.g. 27px on a 135px glyph) slices the
+   top off the opening mark and the bottom off the closing mark, which looks
+   like the marks are "partially hidden". A full line box renders each glyph
+   whole. The marks are positioned in the gutters around the text. */
 .quote .quote-text::before,
 .quote .quote-text::after {
   position: absolute;
   z-index: 2;
+  height: 135px;
   font-family: inter, sans-serif;
   font-size: 135px;
-  line-height: 27px;
+  line-height: 1;
   color: #cecedb;
 }
 
 /* Opening mark: top-left, sitting above the first line in the gutter. */
 .quote .quote-text::before {
   content: open-quote;
-  top: 50px;
+  top: -18px;
   left: -8px;
 }
 
@@ -65,7 +66,7 @@
 .quote .quote-text::after {
   content: close-quote;
   right: 0;
-  bottom: -38px;
+  bottom: -70px;
 }
 
 .quote .quote-attribution {
