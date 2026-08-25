@@ -112,11 +112,10 @@ body.news-article .article-caption em {
   font-style: normal;
 }
 
-/* Body section headings (e.g. "Industry-ready graduates") — Inter 22/700 navy
+/* Body H2 section heading (e.g. "Industry-ready graduates") — Inter 22/700 navy
    with a short light-blue underline, matching the source (not the large
    default display heading). */
-body.news-article main .default-content-wrapper h2,
-body.news-article main .default-content-wrapper h3 {
+body.news-article main .default-content-wrapper h2 {
   margin: 0 0 24px;
   padding-bottom: 22px;
   font-family: inter, sans-serif;
@@ -127,11 +126,22 @@ body.news-article main .default-content-wrapper h3 {
   color: #0c0c48;
 }
 
-body.news-article main .default-content-wrapper h2::after,
-body.news-article main .default-content-wrapper h3::after {
+body.news-article main .default-content-wrapper h2::after {
   content: "";
   display: block;
   width: 80px;
   margin-top: 22px;
   border-bottom: 2px solid #00caef;
+}
+
+/* Body H3 section heading — Inter 20/700 navy, no underline (matches the
+   source's in-article h3, e.g. "A passion for student learning"). */
+body.news-article main .default-content-wrapper h3 {
+  margin: 0 0 9px;
+  font-family: inter, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
+  color: #0c0c48;
 }

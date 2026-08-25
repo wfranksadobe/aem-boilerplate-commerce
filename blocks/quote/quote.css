@@ -14,9 +14,9 @@
   position: relative;
   margin: 0;
 
-  /* Top padding leaves room for the large opening mark; side padding keeps the
-     oversized marks from being clipped at the block edges. */
-  padding: 56px 56px 0;
+  /* Left padding (56px) makes room for the oversized opening mark so the quote
+     text aligns to a consistent left edge; top padding clears the mark. */
+  padding: 78px 0 0 56px;
   font-family: inter, sans-serif;
   font-size: 22px;
   font-style: normal; /* override the global italic blockquote style */
@@ -26,21 +26,26 @@
   color: #4a4a4c;
 }
 
-/* Suppress the global blockquote curly-quote pseudo-marks; we draw our own
-   oversized decorative marks instead. */
-.quote .quote-text p::before,
-.quote .quote-text p::after {
+/* Suppress the global blockquote curly-quote pseudo-mark on paragraphs; we draw
+   our own oversized decorative marks instead. (The closing mark is defined on
+   p:last-of-type::after below.) */
+.quote .quote-text p::before {
   content: none;
 }
 
-/* Oversized decorative opening quotation mark (top-left, fully in view). */
+.quote .quote-text p:not(:last-of-type)::after {
+  content: none;
+}
+
+/* Oversized decorative opening quotation mark — sits top-left, its glyph body
+   aligned to where the quote text begins (135px Inter, matching the source). */
 .quote .quote-text::before {
   content: open-quote;
   position: absolute;
-  top: 62px;
-  left: 4px;
-  font-family: georgia, "Times New Roman", serif;
-  font-size: 90px;
+  top: 74px;
+  left: 0;
+  font-family: inter, sans-serif;
+  font-size: 135px;
   line-height: 0;
   color: #cecedb;
 }
@@ -49,16 +54,15 @@
   margin: 0;
 }
 
-/* Oversized decorative closing quotation mark, trailing the quote text on its
-   own line so it never overlaps the final words. */
-.quote .quote-text::after {
+/* Oversized decorative closing quotation mark, trailing the last line inline so
+   it reads as the end of the quote (never on its own line). */
+.quote .quote-text p:last-of-type::after {
   content: close-quote;
-  display: block;
-  height: 24px;
-  margin-top: 4px;
-  font-family: georgia, "Times New Roman", serif;
-  font-size: 90px;
-  line-height: 0.5;
+  margin-left: 4px;
+  font-family: inter, sans-serif;
+  font-size: 135px;
+  line-height: 0;
+  vertical-align: -0.62em;
   color: #cecedb;
 }
 
