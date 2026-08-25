@@ -1,5 +1,6 @@
 {
   "enabledPlugins": {
-    "excat-commerce@excat-extended": true
+    "excat-commerce@excat-extended": true,
+    "excat-block-library@excat-extended": true
   }
 }
