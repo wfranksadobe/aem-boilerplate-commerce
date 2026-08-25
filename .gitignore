@@ -15,6 +15,7 @@ scripts/__dropins__/**/*.map
 # Scratch files used when staging content uploads to DA
 .tmp-index.html
 .tmp-articles/
+.tmp-*.html
 
 # Ensure these files are tracked
 !CLAUDE.md
