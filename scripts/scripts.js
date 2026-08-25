@@ -9,6 +9,7 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  getMetadata,
 } from './aem.js';
 import {
   loadCommerceEager,
@@ -187,6 +188,76 @@ function decorateButtons(main) {
 }
 
 /**
+ * Structure a news article's header for styling: merge the date and tags onto
+ * one line (date | tag, tag, …), mark the lead/subtitle paragraph, and tag the
+ * lead image + its caption. Runs only on pages with the `news-article`
+ * template. All styling lives in lazy-styles.css (body.news-article …).
+ * @param {Element} main The main element
+ */
+function decorateNewsArticle(main) {
+  // Match case-insensitively: the dev server preserves the authored "Template"
+  // casing, while the production pipeline lowercases meta names.
+  const template = (getMetadata('template') || getMetadata('Template')).trim().toLowerCase();
+  if (template !== 'news-article') return;
+  // Ensure the body carries the class our CSS keys off, regardless of casing.
+  document.body.classList.add('news-article');
+  // The article body is the section that starts with the <h1> (not breadcrumb).
+  const h1 = main.querySelector('h1');
+  const body = h1?.closest('.default-content-wrapper') || h1?.parentElement;
+  if (!body) return;
+
+  const paras = [...body.querySelectorAll(':scope > p')];
+
+  // date = a short paragraph like "20 August 2026".
+  const dateP = paras.find((p) => /^\d{1,2}\s+\w+\s+\d{4}$/.test(p.textContent.trim()));
+  // tags = the next paragraph, built from tag links.
+  const tagsP = dateP?.nextElementSibling?.matches('p') && dateP.nextElementSibling.querySelector('a')
+    ? dateP.nextElementSibling : null;
+  if (dateP) {
+    const meta = document.createElement('div');
+    meta.className = 'article-meta';
+    const date = document.createElement('span');
+    date.className = 'article-date';
+    date.textContent = dateP.textContent.trim();
+    meta.append(date);
+    if (tagsP) {
+      const tags = document.createElement('span');
+      tags.className = 'article-tags';
+      tags.append(...tagsP.childNodes);
+      meta.append(tags);
+    }
+    dateP.replaceWith(meta);
+    tagsP?.remove();
+  }
+
+  // lead image + caption: the <p> holding the <picture>, then a following
+  // <p><em>…</em></p> caption.
+  const pictureP = body.querySelector(':scope > p picture')?.closest('p');
+  if (pictureP) {
+    pictureP.classList.add('article-figure');
+    const next = pictureP.nextElementSibling;
+    if (next && next.matches('p') && next.children.length === 1
+      && next.firstElementChild.tagName === 'EM') {
+      next.classList.add('article-caption');
+    }
+  }
+
+  // subtitle/lead = a paragraph whose only child is <strong>. In the source it
+  // sits above the image, so move it directly before the figure.
+  const lead = paras.find((p) => p.children.length === 1
+    && p.firstElementChild.tagName === 'STRONG'
+    && p.textContent.trim() === p.firstElementChild.textContent.trim());
+  if (lead) {
+    lead.classList.add('article-subtitle');
+    // If the lead currently sits after the image, move it above (source order).
+    if (pictureP && lead.previousElementSibling !== pictureP) {
+      const siblings = [...body.children];
+      if (siblings.indexOf(lead) > siblings.indexOf(pictureP)) pictureP.before(lead);
+    }
+  }
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -197,6 +268,7 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateNewsArticle(main);
 }
 
 /**

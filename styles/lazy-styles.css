@@ -1,1 +1,89 @@
 /* add global styles that can be loaded post LCP here */
+
+/* University of Auckland news article — matches auckland.ac.nz article layout.
+   Structure is prepared by decorateNewsArticle() in scripts.js. */
+
+/* Constrain the article body to a readable measure (~652px like the source),
+   left-aligned within the content column. The breadcrumb section is exempt. */
+body.news-article main > .section:not(.breadcrumb-container) > .default-content-wrapper {
+  max-width: 652px;
+}
+
+/* Date + tags on one line: "20 August 2026 | Tag, Tag, …". */
+body.news-article .article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 12px;
+  margin: 0 0 18px;
+  font-family: inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.69;
+}
+
+body.news-article .article-meta .article-date {
+  color: #6d6e71;
+}
+
+/* Pipe separator between the date and the tags. */
+body.news-article .article-meta .article-tags::before {
+  content: "|";
+  margin-right: 12px;
+  color: #6d6e71;
+}
+
+/* Tags are blue links. */
+body.news-article .article-meta .article-tags a {
+  font-weight: 400;
+  color: #1f2bd4;
+  text-decoration: none;
+}
+
+body.news-article .article-meta .article-tags a:hover {
+  text-decoration: underline;
+}
+
+/* Subtitle / lead paragraph — Inter 24px, muted navy, not bold. */
+body.news-article .article-subtitle {
+  margin: 0 0 18px;
+  font-family: inter, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #3d3d6d;
+}
+
+body.news-article .article-subtitle strong {
+  font-weight: 400;
+}
+
+/* Lead image — constrained width with rounded corners (matches source). */
+body.news-article .article-figure {
+  margin: 0 0 12px;
+}
+
+body.news-article .article-figure picture {
+  display: block;
+}
+
+body.news-article .article-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+/* Caption below the image — smaller, navy, distinct from body text. */
+body.news-article .article-caption {
+  margin: 0 0 24px;
+  font-family: inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #0c0c48;
+}
+
+body.news-article .article-caption em {
+  font-style: normal;
+}

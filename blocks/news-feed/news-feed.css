@@ -3,6 +3,23 @@
    (image 16:9 rounded, Inter title, blue date, grey teaser) and a "See more"
    pill button. Aligned to the page content column like the nav/hero. */
 
+/* Full-bleed section: the boilerplate constrains .section > div to 1200px, so
+   let the news-feed wrapper span the viewport and manage its own gutter. This
+   lets the alternating grey background run edge to edge. */
+main > .section.news-feed-container {
+  margin: 0;
+}
+
+main > .section.news-feed-container > div {
+  max-width: none;
+  padding: 0;
+}
+
+/* Every second visible section gets a grey band (source alternation). */
+main > .section.news-feed-section--alt {
+  background-color: #f2f2f4;
+}
+
 .news-feed {
   --news-content-max: 1264px;
   --news-side-pad: 24px;
@@ -11,11 +28,11 @@
     calc((100% - var(--news-content-max)) / 2 + var(--news-side-pad))
   );
 
-  padding: 0 var(--news-gutter);
+  padding: 48px var(--news-gutter);
   color: #0c0c48;
 }
 
-/* Section heading — InterDisplay 30/600 navy, matching the source. */
+/* Section heading — InterDisplay 32/600 navy, matching the source. */
 .news-feed .news-feed-header {
   margin: 0 0 36px;
 }
@@ -23,9 +40,9 @@
 .news-feed .news-feed-heading {
   margin: 0;
   font-family: interdisplay, inter, sans-serif;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2;
   color: #0c0c48;
 }
 
@@ -97,9 +114,10 @@
   color: #4a4a4c;
 }
 
-/* "See more" pill button — matches the source outline button. */
+/* "See more" pill button — centred below the cards, matches the source. */
 .news-feed .news-feed-more {
   margin: 36px 0 0;
+  text-align: center;
 }
 
 .news-feed .news-feed-more a {

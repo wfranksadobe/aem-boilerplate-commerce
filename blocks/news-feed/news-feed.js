@@ -141,6 +141,19 @@ function buildCard(row) {
 }
 
 /**
+ * Zebra-stripe the visible news-feed sections: every second one that actually
+ * rendered gets a grey background. Runs after each block decorates (idempotent),
+ * so the striping stays correct regardless of which categories are empty/hidden.
+ */
+function restripeSections() {
+  const sections = [...document.querySelectorAll('.section.news-feed-container')]
+    .filter((s) => !s.hasAttribute('hidden') && s.querySelector('.news-feed:not([hidden])'));
+  sections.forEach((s, i) => {
+    s.classList.toggle('news-feed-section--alt', i % 2 === 1);
+  });
+}
+
+/**
  * loads and decorates the news feed
  * @param {Element} block The block element
  */
@@ -168,6 +181,7 @@ export default async function decorate(block) {
     // Hide the whole section (and its wrapper) when there is nothing to show.
     block.closest('.section')?.setAttribute('hidden', '');
     block.setAttribute('hidden', '');
+    restripeSections();
     return;
   }
 
@@ -205,4 +219,6 @@ export default async function decorate(block) {
     more.append(a);
     block.append(more);
   }
+
+  restripeSections();
 }
