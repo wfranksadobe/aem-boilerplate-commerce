@@ -29,6 +29,9 @@
           "...": "../blocks/accordion/_*.json#/definitions"
         },
         {
+          "...": "../blocks/breadcrumb/_*.json#/definitions"
+        },
+        {
           "...": "../blocks/cards/_*.json#/definitions"
         },
         {
@@ -46,6 +49,9 @@
         },
         {
           "...": "../blocks/hero/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/news-feed/_*.json#/definitions"
         },
         {
           "...": "../blocks/targeted-block/_*.json#/definitions"

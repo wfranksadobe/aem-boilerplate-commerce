@@ -21,6 +21,12 @@ import {
   IS_UE,
   IS_DA,
 } from './commerce.js';
+import {
+  getLanguageConfig,
+  getLocaleFromPath,
+  getLanguage,
+  localizePath,
+} from './languages.js';
 
 /*
  * Trusted Types default policy.
@@ -194,11 +200,51 @@ export function decorateMain(main) {
 }
 
 /**
+ * Detect the current language from the path and apply it to the document
+ * (`lang`/`dir`), then inject hreflang alternate links + og:locale for every
+ * configured language. Falls back to English if config is unavailable.
+ * @param {Element} doc The container element
+ */
+async function setupLocale(doc) {
+  const config = await getLanguageConfig();
+  const code = getLocaleFromPath(window.location.pathname, config);
+  const lang = getLanguage(code, config);
+  document.documentElement.lang = lang?.hreflang || code || 'en';
+  if (lang?.dir) document.documentElement.dir = lang.dir;
+
+  const head = doc.head || document.head;
+  // og:locale for the current language
+  if (lang?.hreflang && !head.querySelector('meta[property="og:locale"]')) {
+    const og = document.createElement('meta');
+    og.setAttribute('property', 'og:locale');
+    og.setAttribute('content', lang.hreflang.replace('-', '_'));
+    head.append(og);
+  }
+  // hreflang alternates for every configured language (+ x-default)
+  const { pathname, origin } = window.location;
+  (config.languages || []).forEach((l) => {
+    if (head.querySelector(`link[rel="alternate"][hreflang="${l.hreflang}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'alternate';
+    link.hreflang = l.hreflang;
+    link.href = `${origin}${localizePath(pathname, l.code, config)}`;
+    head.append(link);
+  });
+  if (!head.querySelector('link[rel="alternate"][hreflang="x-default"]')) {
+    const xd = document.createElement('link');
+    xd.rel = 'alternate';
+    xd.hreflang = 'x-default';
+    xd.href = `${origin}${localizePath(pathname, config.default, config)}`;
+    head.append(xd);
+  }
+}
+
+/**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  await setupLocale(doc);
   decorateTemplateAndTheme();
 
   const main = doc.querySelector('main');

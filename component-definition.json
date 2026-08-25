@@ -94,6 +94,18 @@
           }
         },
         {
+          "title": "Breadcrumb",
+          "id": "breadcrumb",
+          "model": "breadcrumb",
+          "plugins": {
+            "da": {
+              "name": "breadcrumb",
+              "rows": 1,
+              "columns": 2
+            }
+          }
+        },
+        {
           "title": "Cards",
           "id": "cards",
           "model": "cards",
@@ -256,8 +268,24 @@
                 {
                   "name": "text",
                   "selector": "div>div>h1"
+                },
+                {
+                  "name": "subtext",
+                  "selector": "div>div>p"
                 }
               ]
+            }
+          }
+        },
+        {
+          "title": "News Feed",
+          "id": "news-feed",
+          "model": "news-feed",
+          "plugins": {
+            "da": {
+              "name": "news-feed",
+              "rows": 1,
+              "columns": 2
             }
           }
         },

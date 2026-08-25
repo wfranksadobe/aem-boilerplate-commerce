@@ -11,7 +11,8 @@
           "fields": [
             { "name": "image", "selector": "div>div>picture>img[src]" },
             { "name": "alt", "selector": "div>div>picture>img[alt]" },
-            { "name": "text", "selector": "div>div>h1" }
+            { "name": "text", "selector": "div>div>h1" },
+            { "name": "subtext", "selector": "div>div>p" }
           ]
         }
       }
@@ -38,6 +39,13 @@
         {
           "component": "text",
           "name": "text",
+          "value": "",
+          "label": "Heading",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "subtext",
           "value": "",
           "label": "Text",
           "valueType": "string"
