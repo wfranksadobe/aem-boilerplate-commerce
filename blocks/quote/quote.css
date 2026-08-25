@@ -14,10 +14,10 @@
   position: relative;
   margin: 0;
 
-  /* Side padding reserves the gutters where the oversized (135px) decorative
-     marks sit: the opening mark hangs in the left gutter (top-aligned with the
-     first line), the closing mark in the bottom-right (after the last line). */
-  padding: 8px 70px 40px;
+  /* Side padding sets where the text sits; the oversized (135px) decorative
+     marks are positioned to tuck partly BEHIND the text (which is lifted above
+     them), so the text overlaps and hides the inner part of each mark. */
+  padding: 20px 48px 40px;
   font-family: inter, sans-serif;
   font-size: 22px;
   font-style: normal; /* override the global italic blockquote style */
@@ -34,34 +34,43 @@
   content: none;
 }
 
+/* Lift the quote text above the decorative marks so it overlaps and hides
+   them where they meet (marks are z-index:0). */
 .quote .quote-text p {
+  position: relative;
+  z-index: 1;
   margin: 0;
 }
 
 /* Decorative marks — 135px Inter, matching the source exactly. Each is
    absolutely positioned into a corner of the quote text. line-height:0 keeps
-   the tall glyph box from pushing the positioning around. */
+   the tall glyph box from pushing the positioning around. z-index:0 sits them
+   BEHIND the quote text (which is lifted to z-index:1) so the text overlaps and
+   hides the marks where they meet. */
 .quote .quote-text::before,
 .quote .quote-text::after {
   position: absolute;
+  z-index: 0;
   font-family: inter, sans-serif;
   font-size: 135px;
   line-height: 0;
   color: #cecedb;
 }
 
-/* Opening mark: top-left gutter, its glyph top-aligned with the first line. */
+/* Opening mark: overlaps the start of the first line so the text tucks over
+   its right side. */
 .quote .quote-text::before {
   content: open-quote;
-  top: 60px;
-  left: 0;
+  top: 74px;
+  left: 30px;
 }
 
-/* Closing mark: bottom-right, trailing the last line. */
+/* Closing mark: overlaps the end of the last line so the text tucks over its
+   left side. */
 .quote .quote-text::after {
   content: close-quote;
-  right: 8px;
-  bottom: 30px;
+  right: 30px;
+  bottom: 20px;
 }
 
 .quote .quote-attribution {
