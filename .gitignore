@@ -22,3 +22,4 @@ scripts/__dropins__/**/*.map
 !AGENTS.md
 migration-work/navigation-validation/
 migration-work/footer-validation/
+tools/importer/.progress/
