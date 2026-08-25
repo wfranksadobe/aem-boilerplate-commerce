@@ -1,0 +1,66 @@
+/* University of Auckland pull-quote — matches auckland.ac.nz article quotes:
+   large Inter text with an oversized decorative opening quote mark, and an
+   attribution (bold name + normal org) below. */
+
+.quote {
+  margin: 45px 0;
+}
+
+.quote .quote-figure {
+  margin: 0;
+}
+
+.quote .quote-text {
+  position: relative;
+  margin: 0;
+  padding: 30px 56px 0;
+  font-family: inter, sans-serif;
+  font-size: 22px;
+  font-style: normal; /* override the global italic blockquote style */
+  font-weight: 400;
+  line-height: 1.64;
+  text-indent: 0;
+  color: #4a4a4c;
+}
+
+/* Suppress the global blockquote curly-quote pseudo-marks; we use one big
+   decorative opening mark instead. */
+.quote .quote-text p::before,
+.quote .quote-text p::after {
+  content: none;
+}
+
+/* Oversized decorative opening quotation mark. */
+.quote .quote-text::before {
+  content: open-quote;
+  position: absolute;
+  top: 50px;
+  left: -8px;
+  font-family: inter, sans-serif;
+  font-size: 135px;
+  line-height: 0;
+  color: #cecedb;
+}
+
+.quote .quote-text p {
+  margin: 0;
+}
+
+.quote .quote-attribution {
+  margin: 35px 0 0;
+  padding: 0 14px 0 56px;
+  font-family: inter, sans-serif;
+  font-size: 16px;
+  line-height: 1.69;
+  color: #4a4a4c;
+}
+
+.quote .quote-attribution .quote-name {
+  display: block;
+  font-weight: 700;
+}
+
+.quote .quote-attribution .quote-source {
+  display: block;
+  font-weight: 400;
+}

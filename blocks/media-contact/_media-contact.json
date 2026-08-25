@@ -1,0 +1,44 @@
+{
+  "definitions": [
+    {
+      "title": "Media Contact",
+      "id": "media-contact",
+      "model": "media-contact",
+      "plugins": {
+        "da": {
+          "name": "media-contact",
+          "rows": 2,
+          "columns": 0,
+          "fields": [
+            { "name": "heading", "selector": "div:nth-child(1)" },
+            { "name": "details", "selector": "div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "media-contact",
+      "fields": [
+        {
+          "component": "text",
+          "name": "heading",
+          "value": "Media contact",
+          "label": "Heading",
+          "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "details",
+          "value": "",
+          "label": "Details",
+          "valueType": "string",
+          "required": true,
+          "description": "Contact name, phone and email."
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

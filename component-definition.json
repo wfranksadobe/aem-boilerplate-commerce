@@ -278,6 +278,76 @@
           }
         },
         {
+          "title": "Media Contact",
+          "id": "media-contact",
+          "model": "media-contact",
+          "plugins": {
+            "da": {
+              "name": "media-contact",
+              "rows": 2,
+              "columns": 0,
+              "fields": [
+                {
+                  "name": "heading",
+                  "selector": "div:nth-child(1)"
+                },
+                {
+                  "name": "details",
+                  "selector": "div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Annotated Image",
+          "id": "annotated-image",
+          "model": "annotated-image",
+          "plugins": {
+            "da": {
+              "name": "annotated-image",
+              "rows": 3,
+              "columns": 0,
+              "fields": [
+                {
+                  "name": "image",
+                  "selector": "div:nth-child(1)"
+                },
+                {
+                  "name": "caption",
+                  "selector": "div:nth-child(2)"
+                },
+                {
+                  "name": "alt",
+                  "selector": "div:nth-child(3)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Quote",
+          "id": "quote",
+          "model": "quote",
+          "plugins": {
+            "da": {
+              "name": "quote",
+              "rows": 2,
+              "columns": 0,
+              "fields": [
+                {
+                  "name": "quote",
+                  "selector": "div:nth-child(1)"
+                },
+                {
+                  "name": "attribution",
+                  "selector": "div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "News Feed",
           "id": "news-feed",
           "model": "news-feed",

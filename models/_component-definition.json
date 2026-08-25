@@ -51,6 +51,15 @@
           "...": "../blocks/hero/_*.json#/definitions"
         },
         {
+          "...": "../blocks/media-contact/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/annotated-image/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/quote/_*.json#/definitions"
+        },
+        {
           "...": "../blocks/news-feed/_*.json#/definitions"
         },
         {

@@ -1,0 +1,44 @@
+{
+  "definitions": [
+    {
+      "title": "Quote",
+      "id": "quote",
+      "model": "quote",
+      "plugins": {
+        "da": {
+          "name": "quote",
+          "rows": 2,
+          "columns": 0,
+          "fields": [
+            { "name": "quote", "selector": "div:nth-child(1)" },
+            { "name": "attribution", "selector": "div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "quote",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "quote",
+          "value": "",
+          "label": "Quote",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "component": "richtext",
+          "name": "attribution",
+          "value": "",
+          "label": "Attribution",
+          "valueType": "string",
+          "description": "First line: name (shown bold). Second line: organisation."
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
