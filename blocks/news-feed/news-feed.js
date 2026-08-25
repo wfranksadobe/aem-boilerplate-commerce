@@ -154,6 +154,23 @@ export default async function decorate(block) {
   // Preserve config, then clear the authored table.
   block.textContent = '';
 
+  // Fetch and filter first: a category with no matching articles collapses
+  // entirely (no empty heading), so unpopulated sections stay invisible until
+  // content exists — important now that every category is wired on the index.
+  const rows = await fetchNewsIndex();
+  const wanted = normalize(tag);
+  const matches = rows
+    .filter((row) => parseTags(row.tags).some((t) => normalize(t) === wanted))
+    .sort((a, b) => sortKey(b).localeCompare(sortKey(a)))
+    .slice(0, count);
+
+  if (!matches.length) {
+    // Hide the whole section (and its wrapper) when there is nothing to show.
+    block.closest('.section')?.setAttribute('hidden', '');
+    block.setAttribute('hidden', '');
+    return;
+  }
+
   // Section header (heading + optional "see more" link), matching the source.
   if (heading) {
     const header = document.createElement('div');
@@ -175,21 +192,6 @@ export default async function decorate(block) {
   const list = document.createElement('ul');
   list.className = 'news-feed-list';
   block.append(list);
-
-  const rows = await fetchNewsIndex();
-  const wanted = normalize(tag);
-  const matches = rows
-    .filter((row) => parseTags(row.tags).some((t) => normalize(t) === wanted))
-    .sort((a, b) => sortKey(b).localeCompare(sortKey(a)))
-    .slice(0, count);
-
-  if (!matches.length) {
-    const empty = document.createElement('p');
-    empty.className = 'news-feed-empty';
-    empty.textContent = 'No articles found.';
-    list.replaceWith(empty);
-    return;
-  }
 
   matches.forEach((row) => list.append(buildCard(row)));
 
