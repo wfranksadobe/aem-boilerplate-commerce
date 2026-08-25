@@ -7,11 +7,14 @@
       "plugins": {
         "da": {
           "name": "media-contact",
-          "rows": 2,
+          "rows": 5,
           "columns": 0,
           "fields": [
-            { "name": "heading", "selector": "div:nth-child(1)" },
-            { "name": "details", "selector": "div:nth-child(2)" }
+            { "name": "title", "selector": "div:nth-child(1)" },
+            { "name": "name", "selector": "div:nth-child(2)" },
+            { "name": "role", "selector": "div:nth-child(3)" },
+            { "name": "mobile", "selector": "div:nth-child(4)" },
+            { "name": "email", "selector": "div:nth-child(5)" }
           ]
         }
       }
@@ -23,19 +26,40 @@
       "fields": [
         {
           "component": "text",
-          "name": "heading",
+          "name": "title",
           "value": "Media contact",
-          "label": "Heading",
+          "label": "Block title",
           "valueType": "string"
         },
         {
-          "component": "richtext",
-          "name": "details",
+          "component": "text",
+          "name": "name",
           "value": "",
-          "label": "Details",
+          "label": "Name",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "role",
+          "value": "",
+          "label": "Role",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "mobile",
+          "value": "",
+          "label": "Mobile number",
           "valueType": "string",
-          "required": true,
-          "description": "Contact name, phone and email."
+          "description": "Rendered with an \"M:\" prefix."
+        },
+        {
+          "component": "text",
+          "name": "email",
+          "value": "",
+          "label": "Email address",
+          "valueType": "string",
+          "description": "Rendered with an \"E:\" prefix as a mailto link."
         }
       ]
     }
