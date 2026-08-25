@@ -11,6 +11,7 @@ header:has(.uoa-header) {
 .uoa-header {
   --uoa-navy: #0c0c48;
   --uoa-blue: #1f2bd4;
+  --uoa-light-blue: #71cfeb;
   --uoa-grey: #4a4a4c;
   --uoa-white: #fff;
 
@@ -279,6 +280,16 @@ header:has(.uoa-header) {
   margin-bottom: 20px;
 }
 
+/* Landing title: te reo prefix in regular weight, English word in bold,
+   matching the source (e.g. "Pitopito kōrero News"). */
+.uoa-header .megamenu-landing-reo {
+  font-weight: 400;
+}
+
+.uoa-header .megamenu-landing-en {
+  font-weight: 700;
+}
+
 .uoa-header .megamenu-landing:hover {
   text-decoration: underline;
 }
@@ -298,6 +309,8 @@ header:has(.uoa-header) {
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--uoa-light-blue);
   color: var(--uoa-white);
 }
 

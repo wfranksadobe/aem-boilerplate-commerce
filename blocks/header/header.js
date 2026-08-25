@@ -39,6 +39,28 @@ async function fetchLocalizedNav(navPath) {
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
+// Source pages we have migrated locally: map the auckland.ac.nz URL to our
+// migrated path so nav links to them stay on-site. The path is resolved
+// per-locale at call time (e.g. /nz/en/news, or /content/nz/en/news on the
+// dev server). Keys are matched against the link's absolute URL.
+const MIGRATED_PAGES = [
+  { match: /^https?:\/\/(www\.)?auckland\.ac\.nz\/en\/news\.html$/i, path: 'news' },
+];
+
+/**
+ * Rewrite a nav link's href to a migrated local page when one exists.
+ * Leaves all other links pointing at the source site untouched.
+ * @param {string} href the authored href
+ * @param {string} basePath the localized news root (e.g. "/nz/en" or
+ *   "/content/nz/en"), without a trailing slash
+ * @returns {string} the (possibly rewritten) href
+ */
+function localizeHref(href, basePath) {
+  if (!href) return href;
+  const migrated = MIGRATED_PAGES.find((p) => p.match.test(href));
+  return migrated ? `${basePath}/${migrated.path}` : href;
+}
+
 /**
  * Convert a leading `:icon-token:` in an element's text into an EDS icon span
  * (`<span class="icon icon-token">`), so decorateIcons() can render /icons/<token>.svg.
@@ -80,8 +102,12 @@ function readTrigger(li) {
 
 /**
  * Build a single dropdown trigger button + its megamenu panel from a source <li>.
+ * @param {Element} li source list item
+ * @param {number} idx index within its list
+ * @param {string} prefix id prefix ("main"/"util")
+ * @param {string} basePath localized news root for rewriting migrated links
  */
-function buildNavItem(li, idx, prefix) {
+function buildNavItem(li, idx, prefix, basePath) {
   const {
     reo, en, href, panel,
   } = readTrigger(li);
@@ -100,7 +126,7 @@ function buildNavItem(li, idx, prefix) {
   item.append(btn);
 
   if (!hasPanel) {
-    if (href) btn.dataset.href = href;
+    if (href) btn.dataset.href = localizeHref(href, basePath);
     return item;
   }
 
@@ -124,8 +150,19 @@ function buildNavItem(li, idx, prefix) {
   if (href) {
     const landing = document.createElement('a');
     landing.className = 'megamenu-landing';
-    landing.href = href;
-    landing.textContent = en;
+    landing.href = localizeHref(href, basePath);
+    // Show the te reo prefix (normal weight) followed by the English word
+    // (bold), e.g. "Pitopito kōrero News", matching the source landing.
+    if (reo) {
+      const reoSpan = document.createElement('span');
+      reoSpan.className = 'megamenu-landing-reo';
+      reoSpan.textContent = `${reo} `;
+      landing.append(reoSpan);
+    }
+    const enSpan = document.createElement('span');
+    enSpan.className = 'megamenu-landing-en';
+    enSpan.textContent = en;
+    landing.append(enSpan);
     inner.append(landing);
   }
 
@@ -142,7 +179,7 @@ function buildNavItem(li, idx, prefix) {
       heading.className = 'megamenu-heading';
       if (headingLink) {
         const a = document.createElement('a');
-        a.href = headingLink.getAttribute('href');
+        a.href = localizeHref(headingLink.getAttribute('href'), basePath);
         a.textContent = headingLink.textContent.trim();
         heading.append(a);
       } else {
@@ -157,7 +194,7 @@ function buildNavItem(li, idx, prefix) {
       subList.querySelectorAll(':scope > li > a').forEach((a) => {
         const liEl = document.createElement('li');
         const link = document.createElement('a');
-        link.href = a.getAttribute('href');
+        link.href = localizeHref(a.getAttribute('href'), basePath);
         link.textContent = a.textContent.trim();
         liEl.append(link);
         ul.append(liEl);
@@ -270,6 +307,12 @@ export default async function decorate(block) {
   const navMeta = block.closest('.nav-wrapper')?.dataset?.navPath || '/nav';
   const html = await fetchLocalizedNav(navMeta);
 
+  // Base path for migrated-page links. Our migrated content lives under
+  // /nz/en (and /content/nz/en on the dev server). Preserve a leading
+  // /content root when present so links resolve on localhost.
+  const contentRoot = window.location.pathname.startsWith('/content/') ? '/content' : '';
+  const localeBase = `${contentRoot}/nz/en`;
+
   const dom = new DOMParser().parseFromString(html, 'text/html');
   const sections = [...dom.body.children].filter((el) => el.tagName === 'DIV');
   const [brandSection, utilitySection, mainSection] = sections;
@@ -331,7 +374,7 @@ export default async function decorate(block) {
   const utilityList = document.createElement('ul');
   utilityList.className = 'nav-list';
   const utilityItems = utilitySection ? [...utilitySection.querySelectorAll(':scope > ul > li')] : [];
-  utilityItems.forEach((li, i) => utilityList.append(buildNavItem(li, i, 'util')));
+  utilityItems.forEach((li, i) => utilityList.append(buildNavItem(li, i, 'util', localeBase)));
   utilityNav.append(utilityList);
 
   const search = document.createElement('form');
@@ -367,7 +410,7 @@ export default async function decorate(block) {
   const mainList = document.createElement('ul');
   mainList.className = 'nav-list';
   const mainItems = mainSection ? [...mainSection.querySelectorAll(':scope > ul > li')] : [];
-  mainItems.forEach((li, i) => mainList.append(buildNavItem(li, i, 'main')));
+  mainItems.forEach((li, i) => mainList.append(buildNavItem(li, i, 'main', localeBase)));
   mainNav.append(mainList);
   header.append(mainNav);
 
