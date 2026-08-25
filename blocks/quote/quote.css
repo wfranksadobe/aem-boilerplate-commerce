@@ -34,36 +34,34 @@
   content: none;
 }
 
-/* Text sits above the decorative marks; where a mark and the text overlap the
-   text shows in front (marks are z-index:0). */
 .quote .quote-text p {
   position: relative;
-  z-index: 1;
   margin: 0;
 }
 
 /* Decorative marks — 135px Inter with a collapsed 27px line box, exactly like
-   the source. Positioned in the margin space around the text (behind it). */
+   the source. A 135px quote glyph is wider than the 56px gutter, so its inner
+   edge crosses into the text column; drawing the marks IN FRONT (z-index:2)
+   means that inner edge is never painted over by the text. The marks are a pale
+   grey, so overlapping the text edge stays perfectly legible. */
 .quote .quote-text::before,
 .quote .quote-text::after {
   position: absolute;
-  z-index: 0;
+  z-index: 2;
   font-family: inter, sans-serif;
   font-size: 135px;
   line-height: 27px;
   color: #cecedb;
 }
 
-/* Opening mark: top-left, sitting in the space above the first line (source:
-   top 50px, left -8px relative to the blockquote box). */
+/* Opening mark: top-left, sitting above the first line in the gutter. */
 .quote .quote-text::before {
   content: open-quote;
   top: 50px;
   left: -8px;
 }
 
-/* Closing mark: bottom-right, hanging below the last line (source: right 0,
-   bottom -38px relative to the blockquote box). */
+/* Closing mark: bottom-right, hanging below the last line. */
 .quote .quote-text::after {
   content: close-quote;
   right: 0;
