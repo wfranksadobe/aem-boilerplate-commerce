@@ -5,6 +5,8 @@ to **AEM Assets** under `content/dam/University of Auckland/news`.
 
 - **4,631 images**, organised as `news/<year>/<article-slug>/image-N.jpg`
   (year for browsability, article slug as the folder — no `yyyy/mm/dd` nesting).
+  Slugs are AEM-normalized (lowercase, single hyphens, no leading/trailing
+  hyphens) so folder names match the article page paths in Document Authoring.
 - The archive is split into ≤90 MB parts (`parts/`) so each file stays under
   GitHub's 100 MB limit. The full `.tar` itself is git-ignored.
 
@@ -18,7 +20,7 @@ tar -xf uoa-news-images.tar          # extracts the news/ tree
 Expected checksum of the reassembled tar:
 
 ```
-107d09b567be5c1b4b8a40d3228dbc7a  uoa-news-images.tar
+3ea3a1fe73312f4477b30347646ebdf0  uoa-news-images.tar
 ```
 
 ## Upload to AEM
