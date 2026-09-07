@@ -20,9 +20,18 @@
   min-height: 460px;
 }
 
+/* Once JS is ready every slide is rendered and stacked; the active one is in
+   flow (defines the height) and fully opaque, the others fade out beneath it.
+   Crossfade via opacity so switching animates instead of hard-swapping. */
+.hero-carousel.is-ready .hero-carousel-slide {
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
 /* First paint before JS decorates: show the first slide so there is no empty
-   box. Scoped to :not(.is-ready) so it stops applying once JS takes over —
-   otherwise it would keep the first slide visible on top of the active one. */
+   box. Scoped to :not(.is-ready) so it stops applying once JS takes over. */
 .hero-carousel:not(.is-ready) .hero-carousel-slide:first-child {
   position: relative;
   display: block;
@@ -30,7 +39,14 @@
 
 .hero-carousel.is-ready .hero-carousel-slide.is-active {
   position: relative;
-  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-carousel.is-ready .hero-carousel-slide {
+    transition: none;
+  }
 }
 
 .hero-carousel .hero-carousel-media {
