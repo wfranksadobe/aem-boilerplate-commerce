@@ -1,80 +1,104 @@
-# Wire Remaining News Sections to `news-feed` — Publish & Verify Plan
+# FIGMA Redesign — News Index + Article Page (isolated `FIGMA` branch)
 
 ## Objective
 
-Get the University of Auckland news index's **full set of 10 category sections** live and correctly populated. The `news-feed` blocks for all 10 source categories are **already authored** in `content/nz/en/news/index.plain.html`; the remaining work is to **publish the index to DA** so it goes live, and to **build a complete local query index** so every category feed populates and can be verified — rather than the 8-of-10 currently rendering empty because only 2 articles are in the local `query-index.json`.
+Implement the University of Auckland **News (Aug 2026)** redesign — covering **both** the **news index/homepage** and the **article page** — on a **new `FIGMA` branch only**. `main` must not receive any of this work. The `FIGMA` branch becomes the working line for all redesign changes; we iterate there.
 
-## What I confirmed (read-only investigation)
+## Hard constraints (confirmed with you)
 
-- **All 10 source categories are already wired** in `content/nz/en/news/index.plain.html`, matching `migration-work/jcr-content/nz/en/news/index.md` one-for-one: Sustainable impact, Arts and culture, Business and economy, Education and society, Te ao Māori, Health and medicine, Politics and law, Science and technology, University news, The Challenge. **No Feature Article section exists** in the source.
-- **`news-feed.js` is category-agnostic and complete** — fetches `query-index.json`, filters by tag (case-insensitive, multi-shape tags), sorts by `publicationDate` desc, renders N cards, **self-hides empty categories**, and zebra-stripes visible sections. No block-code changes needed.
-- **`helix-query.yaml`** already defines the `news` index (title, image, description, publicationDate, tags, tagPaths) scoped to `/nz/en/news/**`.
-- **Local `query-index.json` has only 2 rows** (the 2 hand-migrated articles) → 8 feeds render empty locally. Articles' category **label** tags live in each article's `metadata` block (`Tags` field), which is exactly what the feed matches on.
-- **Publish tooling exists**: `tools/importer/publish-batch.mjs` uploads each local `.plain.html` (wrapped in `<body><main>…`) to DA, previews, and publishes — but it **only walks `2024/2025/2026` year folders**, so the **index page itself is not covered** and needs an explicit upload+preview+publish.
+- **No changes to `main`.** All work lands on a new branch **`FIGMA`**, branched from **current `main`** (which already includes the merged news-feed/index work).
+- Content is authored/synced via the DA flow, never hand-edited in `content/` (project rule).
+- View/understanding is complete; this artifact is the plan. Building requires **Execute mode**.
 
-## Scope (confirmed with you)
+## What I understood from Figma (full review)
 
-- **In:** Publish the existing 10-section index to DA (upload → preview → publish); build a full local `query-index.json` from migrated article metadata; verify all 10 feeds populate and render correctly; lint.
-- **Out:** Adding sections for non-source tags (Pacific, Environment, Kawea ake, etc.); block-code redesign; a full list/search page; re-running the whole 2,449-article corpus (already published).
+**File:** `News (Aug 2026)` (`4R2m3DmpddQiE9KfbM3QuK`). Two canvases reviewed frame-by-frame:
+
+### 1. News index / homepage redesign (canvas `1:8`, frame `Desktop 4:3235`)
+Top → bottom: **New Header (Aug)** → navy page banner ("News and opinion") → **Hero carousel** (dark image, category pill, headline, date, description, Read more, arrow + 3 dots) → breadcrumb → **Search + Filter bar** → **"Latest News"** = **filter chips** (All, Arts and culture, Business and economy, Education and society, Health and medicine, Politics and law, Science and technology, History/literature and philosophy, University news, Sociology and Design, Show more) above a **single unified 3×3 card grid** (card = image + category tag pill + title + date + teaser) → **Browse all news** → **"Experience the University"** (grey band, video component) → **"Find an expert"** (4 expert cards) → **media advisers CTA** (navy rounded banner) → footer. Also: mobile (320), tablet (768), a "Switching category tag" interaction variant, and hero variations (gradient overlay, light-background full overlay, hover-arrow states, azure/waitematā tints).
+
+**Key change vs. our current build:** our index is 10 separate tag-driven `news-feed` sections; the redesign replaces that with **one filterable Latest-News grid + hero carousel + Experience + Find-an-expert**. Materially different structure.
+
+### 2. Article page redesign (canvas `3:2`, frame `A - Desktop 320:4381`)
+**New Header (Aug)** → navy banner → breadcrumb → **light-lavender title block** (date, large headline, standfirst/intro) → **Hero image** (full-width, with caption) → content area: **"Key Points"** callout box (navy tab header, ticked bullets) + **"Related Links"** side box → article **body** (intro bold, inline links, image with caption, **pull-quote** with attribution) → **photo gallery grid** ("View all 8 photos +") → **"Media Contact"** rounded card → **Tags** (chips + "Show N more") → footer.
+
+**Documented variants:** **A** (hero image with Key Points overlay), **B – Azure 10% + Tags at Top**, **No Hero image - Desktop** (tags move directly under the title block, no hero), **Non-Hero Leading Image** (leading image sits inside body, not full-bleed), plus **Share box / Share behaviour** (Facebook/LinkedIn/Instagram/copy) and colour variants, and Tablet/Mobile for each. Reusable component headers exist: **Text Article Headers, Podcast Headers, Key Points, Share box**.
+
+**Vs. our current article blocks:** we have `breadcrumb`, `annotated-image`, `quote`, `media-contact`. The redesign adds **Key Points**, **Related Links**, **Share**, a **photo-gallery**, a restyled **title/standfirst block**, and a **hero-image variant system** — and restyles quote/media-contact/tags to match.
+
+### Design system observations (from frames; exact tokens gated by Figma plan)
+- Deep navy `#0c0c48`-family for headings/【tabs】/footer; light-lavender section tint behind title/callouts; blue links; rounded pills/cards; InterDisplay headings, Inter body. I'll extract precise px/hex during build via computed styles on the rendered output and by eye-matching the frames (variable defs are blocked by the Figma plan, so no automated token export).
+
+## Scope
+
+**In scope (on `FIGMA` only):**
+- Branch `FIGMA` from current `main`.
+- **News index redesign:** hero carousel, search+filter bar, filterable "Latest News" grid (chips), "Experience the University" video block, "Find an expert" block, media-advisers CTA, New Header (Aug) — as new/updated blocks.
+- **Article page redesign:** title/standfirst block, hero-image + caption (with no-hero / non-hero-leading variants), Key Points, Related Links, Share, photo gallery, restyled quote / media-contact / tags.
+- Responsive (mobile/tablet/desktop), accessible, lint-clean; verified on local preview against the Figma frames.
+
+**Out of scope (for now / needs your steer):**
+- Publishing to DA and going live (kept separate; `main` untouched means no auto-deploy of these).
+- Podcast Headers component (present in Figma but not obviously in these two page types) unless you want it.
+- Replacing the existing 10-section `news-feed` index in production.
+- Real backend for search/filter beyond the existing `query-index.json` (chips can filter client-side over the same index).
 
 ## Approach & Phases
 
-### Phase A — Build a complete local query index
-1. Write a small read-only Node script (`tools/importer/build-local-index.mjs`) that walks `content/nz/en/news/{2024,2025,2026}/**.plain.html`, parses each `metadata` block (Title, Description, Publication Date, Tags, Image) plus the folder date, and emits a complete `content/nz/en/news/query-index.json` in the same shape AEM produces (`{total, offset, limit, data:[…]}`), with `path`, `title`, `image`, `description`, `publicationDate`, `tags` (array), `tagPaths`.
-2. This is a **local verification fixture only** — production's real `query-index.json` is generated by AEM from `helix-query.yaml` on publish. Note this clearly so it isn't mistaken for source-of-truth content.
+### Phase 0 — Branch + scaffolding
+1. Create and switch to **`FIGMA`** from current `main`; push `-u`. All subsequent commits go here.
+2. Save a design-reference note (frame list + node IDs + screenshots) under `.migration/plans/` for traceability.
 
-### Phase B — Verify all 10 feeds locally
-3. Start the dev server (`aem up`) if not running; open `http://localhost:3000/content/nz/en/news/index.html`.
-4. Use Playwright snapshot to confirm **all 10 category sections render**, each with up to 3 cards (image, title, date, teaser), correct headings, and "See more" links; confirm zebra-striping alternates across the visible sections.
-5. Spot-check with `evaluate` that empty categories (if any tag has zero articles) self-hide without leaving an empty heading.
-6. Check console for errors; confirm cards link to valid article paths.
+### Phase 1 — Design tokens & shared styles
+3. Establish shared redesign tokens (navy, lavender tint, blue link, pill/card radii, InterDisplay/Inter scale, spacing) as CSS custom properties, matched by eye + computed-style checks to the frames.
 
-### Phase C — Publish the index to DA (go live)
-7. Upload `content/nz/en/news/index.plain.html` (wrapped `<body><main>…</main></body>`) to DA at `admin.da.live/source/wfranksadobe/aem-boilerplate-commerce/nz/en/news/index.html` via `curl` (credentials auto-injected — no token handled).
-8. Preview it: `POST admin.hlx.page/preview/wfranksadobe/aem-boilerplate-commerce/main/nz/en/news/index`.
-9. Publish it: `POST admin.hlx.page/live/wfranksadobe/aem-boilerplate-commerce/main/nz/en/news/index`.
-10. Trigger a preview/live of the **news query index** so AEM rebuilds it with the full corpus (preview/live on `/nz/en/news/query-index.json`), so the live feeds populate from all published articles, not just 2.
-11. If any DA call returns 401/403, stop and tell you to enable the Adobe-credentials opt-in in Settings → LLM Permissions (never request a token in chat), then retry.
+### Phase 2 — News index redesign (block by block)
+4. **Hero carousel** block (image, category pill, headline, date, desc, Read more, dots/arrows; a11y: keyboard, aria-roledescription, reduced-motion).
+5. **Latest-News filter grid**: chips + unified card grid filtering the news `query-index.json` client-side; "Browse all news".
+6. **Search + Filter bar**, **Experience the University** (video), **Find an expert**, **media-advisers CTA**.
+7. **New Header (Aug)** updates (evaluate against existing header block).
 
-### Phase D — Verify on preview/live
-12. Fetch the production preview index (`https://main--aem-boilerplate-commerce--wfranksadobe.aem.page/nz/en/news/index`) and confirm all 10 sections populate from the real AEM-built query index.
-13. Visual-critique the rendered index (mobile/tablet/desktop) against the source layout for the category grid, headings, and "See more" affordances.
+### Phase 3 — Article page redesign (block by block)
+8. **Title/standfirst block** + **Hero image + caption**, with **no-hero** and **non-hero-leading-image** variants.
+9. **Key Points** callout, **Related Links** box, **Share** control, **photo gallery** ("View all N photos").
+10. Restyle **quote**, **media-contact**, **tags** to the redesign; keep `breadcrumb`.
 
-### Phase E — Validate & ship
-14. `npm run lint` (only tooling/`build-local-index.mjs` is new; block code unchanged).
-15. Commit the new index-builder script (and, if desired, the regenerated local `query-index.json`) on a feature branch; push; open a PR with a preview link to `/nz/en/news/index`. Run `gh pr checks` / PageSpeed.
+### Phase 4 — Verify locally
+11. Build static sample HTML in `drafts/` (or reuse a migrated article + the index) and verify each block on `localhost:3000` via Playwright snapshot/evaluate at mobile/tablet/desktop, matching the Figma frames.
+12. Accessibility (headings, roles, keyboard, contrast), console-error check.
 
-## Key files
+### Phase 5 — Lint & land on FIGMA
+13. `npm run lint` (JS + CSS); fix.
+14. Commit incrementally to `FIGMA`; push. **Open a PR from `FIGMA` (do not merge to `main`)** so it's reviewable, with feature-preview links (`https://FIGMA--aem-boilerplate-commerce--wfranksadobe.aem.page/…`). Decide publishing later.
 
-- `tools/importer/build-local-index.mjs` *(new)* — local query-index builder for verification
-- `content/nz/en/news/query-index.json` *(regenerated locally, verification fixture)*
-- `content/nz/en/news/index.plain.html` *(unchanged content; uploaded/published to DA)*
-- No changes to `blocks/news-feed/*` or `helix-query.yaml` (already correct)
+## Key files (all on `FIGMA`)
+- `blocks/hero/*` (or new `hero-carousel/*`), `blocks/news-feed/*` (or new `latest-news/*` filter grid), new `blocks/find-an-expert/*`, `blocks/experience/*`, `blocks/media-cta/*`.
+- Article: new `blocks/key-points/*`, `blocks/related-links/*`, `blocks/share/*`, `blocks/gallery/*`, updated `blocks/quote/*`, `blocks/media-contact/*`, `blocks/annotated-image/*`, tags styling.
+- `styles/*` shared tokens; `.migration/plans/figma-redesign-*.md` reference; model/`component-*.json` regen for any new blocks.
 
 ## Risks & open items
-
-- **Content-authoring rule:** the index HTML is **not hand-edited** — it's already authored and simply gets published via the DA flow. Only tooling (`build-local-index.mjs`) and the local fixture index are generated.
-- **Local vs. production index:** the locally built `query-index.json` is a verification aid; the authoritative one is AEM-generated on publish. Phase D verifies the real one.
-- **DA credential opt-in** may be off → publish calls 401/403. Mitigation: instruct you to enable it in Settings and retry; no secrets in chat.
-- **Empty categories:** any of the 10 tags with zero matching published articles will self-hide by design — that's correct behavior, not a bug; I'll note which (if any) are empty.
-- **Metadata parse edge cases:** a few articles may have malformed/empty Tags; the builder will skip cleanly and I'll report counts per category.
+- **Structural shift on the index** (10 sections → filter grid): larger than a restyle; confirm we replace vs. add alongside.
+- **Figma tokens gated** by plan → exact hex/px derived by eye + computed styles, not auto-exported.
+- **Search/filter backend**: chips filter the existing index client-side unless you want real search.
+- **`main` isolation**: nothing here deploys to production until you explicitly decide; the branch preview is how we review.
+- **Variant breadth** (A / B / no-hero / non-hero-leading / share colour variants): I'll build the primary A-Desktop first, then variants, to avoid over-building before your review.
 
 ## Checklist
-
-- [ ] Confirm dev server is running (`aem up`) for local verification
-- [ ] Write `tools/importer/build-local-index.mjs` (parse article metadata → full query-index.json)
-- [ ] Generate complete local `content/nz/en/news/query-index.json` and report per-category article counts
-- [ ] Verify all 10 category feeds render/populate locally (Playwright snapshot), incl. cards, headings, "See more"
-- [ ] Confirm empty categories self-hide and zebra-striping stays correct; check console for errors
-- [ ] Upload `index.plain.html` to DA (`nz/en/news/index.html`) via curl
-- [ ] Preview the index page on `admin.hlx.page`
-- [ ] Publish (live) the index page on `admin.hlx.page`
-- [ ] Preview/publish the news `query-index.json` so AEM rebuilds it with the full corpus
-- [ ] Verify the production-preview index populates all 10 sections from the real AEM index
-- [ ] Visual-critique index vs. source at mobile/tablet/desktop
-- [ ] `npm run lint`
-- [ ] Commit + push on a feature branch; open PR with `/nz/en/news/index` preview link; run `gh pr checks` / PageSpeed
+- [ ] (Execute) Create + push branch **`FIGMA`** from current `main`; confirm `main` stays untouched
+- [ ] Save Figma design-reference (frames, node IDs, screenshots) under `.migration/plans/`
+- [ ] Define shared redesign tokens (colour, type, radius, spacing) as CSS variables
+- [ ] Index: build **hero carousel** block (a11y + reduced-motion)
+- [ ] Index: build **Latest News** filter-chips + unified card grid over `query-index.json` + "Browse all news"
+- [ ] Index: build **search+filter bar**, **Experience the University**, **Find an expert**, **media-advisers CTA**
+- [ ] Index: apply **New Header (Aug)** updates
+- [ ] Article: **title/standfirst** block + **hero image + caption** (with no-hero / non-hero-leading variants)
+- [ ] Article: **Key Points**, **Related Links**, **Share**, **photo gallery**
+- [ ] Article: restyle **quote**, **media-contact**, **tags**; keep breadcrumb
+- [ ] Verify all blocks locally (Playwright, mobile/tablet/desktop) against Figma frames
+- [ ] Accessibility + console checks
+- [ ] `npm run lint` (JS + CSS) and fix
+- [ ] Commit + push to **`FIGMA`**; open PR from `FIGMA` (do **not** merge to `main`) with feature-preview links
 
 ---
 
-**Note:** This artifact is the plan only. Executing it (running the index-builder, Playwright verification, and DA upload/preview/publish) requires **Execute mode** — approve the plan to switch over and I'll start with Phase A.
+**Note:** This is the plan only. Creating the `FIGMA` branch and building the blocks are write operations requiring **Execute mode**. Approve to proceed and I'll start with Phase 0 (branch creation) — and I will not touch `main`. One decision I'll need before Phase 2: whether the redesigned index **replaces** or **sits alongside** the current 10-section `news-feed`.
