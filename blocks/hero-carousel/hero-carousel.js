@@ -84,6 +84,10 @@ export default async function decorate(block) {
   const total = slides.length;
   if (total === 0) return;
 
+  // Signal that JS has taken over: the CSS first-paint fallback (which forces
+  // the first slide visible) stops applying, so only .is-active shows.
+  block.classList.add('is-ready');
+
   // Controls + dots only make sense with more than one slide.
   const controls = document.createElement('div');
   controls.className = 'hero-carousel-controls';

@@ -20,13 +20,15 @@
   min-height: 460px;
 }
 
-.hero-carousel .hero-carousel-slide.is-active {
+/* First paint before JS decorates: show the first slide so there is no empty
+   box. Scoped to :not(.is-ready) so it stops applying once JS takes over —
+   otherwise it would keep the first slide visible on top of the active one. */
+.hero-carousel:not(.is-ready) .hero-carousel-slide:first-child {
   position: relative;
   display: block;
 }
 
-/* First paint before JS: show the first slide so there is no empty box. */
-.hero-carousel .hero-carousel-slide:first-child {
+.hero-carousel.is-ready .hero-carousel-slide.is-active {
   position: relative;
   display: block;
 }
