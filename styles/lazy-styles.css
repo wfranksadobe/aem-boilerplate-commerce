@@ -145,3 +145,198 @@ body.news-article main .default-content-wrapper h3 {
   letter-spacing: normal;
   color: #0c0c48;
 }
+
+/* The redesign selectors below are scoped to body.news-article-figma, a
+   separate template from body.news-article above, so they never share a
+   cascade; the cross-rule specificity ordering warning is a false positive. */
+/* stylelint-disable no-descending-specificity */
+
+/* ---------------------------------------------------------------------------
+   News (Aug 2026) redesign — article page (template: news-article-figma).
+   Kept separate from the current news-article template so the existing pages
+   are untouched. Adds a lavender title block, a full-bleed hero image with
+   caption, a two-column body (article + right rail), and variants:
+   - .no-hero        : tags sit under the title block, no hero image
+   - .non-hero-lead  : the leading image sits inside the body, not full-bleed
+   Structure is prepared by decorateFigmaArticle() in scripts.js.
+   --------------------------------------------------------------------------- */
+
+/* Lavender title block spanning full width; inner content is centred. */
+body.news-article-figma main > .section.figma-title-container {
+  margin: 0;
+  background: var(--uoa-lavender);
+}
+
+body.news-article-figma .figma-title {
+  max-width: var(--uoa-content-max);
+  margin: 0 auto;
+  padding: 40px 24px 44px;
+}
+
+body.news-article-figma .figma-title .article-date {
+  display: block;
+  margin: 0 0 12px;
+  font-family: var(--uoa-font-body);
+  font-size: 15px;
+  color: var(--uoa-muted);
+}
+
+body.news-article-figma .figma-title h1 {
+  margin: 0 0 16px;
+  font-family: var(--uoa-font-display);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1.12;
+  color: var(--uoa-navy);
+}
+
+body.news-article-figma .figma-title .article-subtitle {
+  margin: 0;
+  font-family: var(--uoa-font-body);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #3d3d6d;
+}
+
+/* Inline tag chips under the title (used by the no-hero variant). */
+body.news-article-figma .figma-title .article-tagchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 0;
+}
+
+body.news-article-figma .figma-title .article-tagchips a {
+  padding: 7px 16px;
+  border: 1px solid var(--uoa-hairline);
+  border-radius: var(--uoa-radius-pill);
+  background: #fff;
+  font-family: var(--uoa-font-body);
+  font-size: 13px;
+  color: var(--uoa-ink);
+  text-decoration: none;
+}
+
+/* Full-bleed hero image with a caption strip. */
+body.news-article-figma .figma-hero {
+  position: relative;
+  width: 100%;
+}
+
+body.news-article-figma .figma-hero img {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: cover;
+}
+
+body.news-article-figma .figma-hero .figma-hero-caption {
+  display: inline-block;
+  padding: 6px 14px;
+  margin: 0;
+  background: #fff;
+  font-family: var(--uoa-font-body);
+  font-size: 13px;
+  color: var(--uoa-muted);
+}
+
+/* Two-column body: article (max 652) + a ~258px right rail. */
+body.news-article-figma .figma-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  max-width: var(--uoa-content-max);
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+body.news-article-figma .figma-body .figma-article {
+  min-width: 0;
+  max-width: 652px;
+}
+
+body.news-article-figma .figma-body .figma-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  body.news-article-figma .figma-body {
+    grid-template-columns: minmax(0, 652px) 258px;
+    gap: 56px;
+    justify-content: center;
+  }
+}
+
+/* Article body typography inside the figma layout (mirrors news-article but
+   scoped to the two-column body). */
+body.news-article-figma .figma-article .default-content-wrapper p {
+  font-family: var(--uoa-font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: #2b2b3d;
+}
+
+body.news-article-figma .figma-article .default-content-wrapper a {
+  color: var(--uoa-blue);
+}
+
+body.news-article-figma .figma-article .default-content-wrapper h2 {
+  margin: 28px 0 12px;
+  font-family: var(--uoa-font-body);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--uoa-navy);
+}
+
+body.news-article-figma .figma-article .default-content-wrapper h3 {
+  margin: 24px 0 8px;
+  font-family: var(--uoa-font-body);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--uoa-navy);
+}
+
+/* The standalone article blocks line up with the 652px measure. */
+body.news-article-figma .figma-article .quote,
+body.news-article-figma .figma-article .media-contact,
+body.news-article-figma .figma-article .gallery,
+body.news-article-figma .figma-article .key-points {
+  max-width: 652px;
+}
+
+/* Tags region at the foot of the article — pill chips (restyled to match). */
+body.news-article-figma .figma-tags {
+  max-width: var(--uoa-content-max);
+  margin: 8px auto 40px;
+  padding: 0 24px;
+}
+
+body.news-article-figma .figma-tags h2 {
+  margin: 0 0 14px;
+  font-family: var(--uoa-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--uoa-navy);
+}
+
+body.news-article-figma .figma-tags a {
+  display: inline-block;
+  margin: 0 8px 8px 0;
+  padding: 8px 18px;
+  border: 1px solid var(--uoa-hairline);
+  border-radius: var(--uoa-radius-pill);
+  font-family: var(--uoa-font-body);
+  font-size: 13px;
+  color: var(--uoa-ink);
+  text-decoration: none;
+}
+
+body.news-article-figma .figma-tags a:hover {
+  border-color: var(--uoa-navy);
+}
+
+/* stylelint-enable no-descending-specificity */
+

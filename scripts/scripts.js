@@ -260,6 +260,107 @@ function decorateNewsArticle(main) {
 }
 
 /**
+ * Structure a News (Aug 2026) redesign article (template: news-article-figma).
+ * Wraps the title/date/subtitle into a lavender title block, promotes the lead
+ * image to a full-bleed hero with caption, and splits the remaining body into a
+ * two-column layout (article + right rail holding Share/Related Links).
+ * Variants via the Template value: "…-figma", "…-figma-no-hero",
+ * "…-figma-non-hero-lead". All styling lives in lazy-styles.css.
+ * @param {Element} main The main element
+ */
+function decorateFigmaArticle(main) {
+  const template = (getMetadata('template') || getMetadata('Template')).trim().toLowerCase();
+  if (!template.startsWith('news-article-figma')) return;
+  document.body.classList.add('news-article-figma');
+  const noHero = template.includes('no-hero');
+  const nonHeroLead = template.includes('non-hero-lead');
+
+  const h1 = main.querySelector('h1');
+  const bodyWrap = h1?.closest('.default-content-wrapper') || h1?.parentElement;
+  if (!bodyWrap) return;
+
+  const paras = [...bodyWrap.querySelectorAll(':scope > p')];
+  const dateP = paras.find((p) => /^\d{1,2}\s+\w+\s+\d{4}$/.test(p.textContent.trim()));
+  const tagsP = dateP?.nextElementSibling?.matches('p') && dateP.nextElementSibling.querySelector('a')
+    ? dateP.nextElementSibling : null;
+  const lead = paras.find((p) => p.children.length === 1
+    && p.firstElementChild.tagName === 'STRONG'
+    && p.textContent.trim() === p.firstElementChild.textContent.trim());
+
+  // Build the lavender title block.
+  const titleSection = document.createElement('div');
+  titleSection.className = 'section figma-title-container';
+  const title = document.createElement('div');
+  title.className = 'figma-title';
+  if (dateP) {
+    const date = document.createElement('span');
+    date.className = 'article-date';
+    date.textContent = dateP.textContent.trim();
+    title.append(date);
+    dateP.remove();
+  }
+  if (h1) title.append(h1);
+  if (lead) { lead.classList.add('article-subtitle'); title.append(lead); }
+  // In the no-hero variant, tags sit as chips directly under the title.
+  if (noHero && tagsP) {
+    const chips = document.createElement('div');
+    chips.className = 'article-tagchips';
+    chips.append(...tagsP.childNodes);
+    title.append(chips);
+    tagsP.remove();
+  }
+  titleSection.append(title);
+  main.prepend(titleSection);
+
+  // Promote the lead image to a full-bleed hero (unless a non-hero variant).
+  const pictureP = bodyWrap.querySelector(':scope > p picture')?.closest('p');
+  if (pictureP && !noHero && !nonHeroLead) {
+    const hero = document.createElement('div');
+    hero.className = 'section figma-hero-container';
+    const heroInner = document.createElement('div');
+    heroInner.className = 'figma-hero';
+    heroInner.append(pictureP.querySelector('picture'));
+    const capP = pictureP.nextElementSibling;
+    if (capP && capP.matches('p') && capP.firstElementChild?.tagName === 'EM') {
+      const cap = document.createElement('p');
+      cap.className = 'figma-hero-caption';
+      cap.textContent = capP.textContent.trim();
+      heroInner.append(cap);
+      capP.remove();
+    }
+    hero.append(heroInner);
+    titleSection.after(hero);
+    pictureP.remove();
+  }
+
+  // Wrap the remaining content into a two-column body with a right rail.
+  const bodySection = document.createElement('div');
+  bodySection.className = 'section figma-body-container';
+  const bodyGrid = document.createElement('div');
+  bodyGrid.className = 'figma-body';
+  const article = document.createElement('div');
+  article.className = 'figma-article';
+  const rail = document.createElement('div');
+  rail.className = 'figma-rail';
+
+  // Move Share + Related Links sections into the rail; the rest into article.
+  const sections = [...main.querySelectorAll(':scope > .section')]
+    .filter((s) => s !== titleSection && !s.classList.contains('figma-hero-container')
+      && !s.classList.contains('breadcrumb-container'));
+  sections.forEach((s) => {
+    if (s.querySelector('.share, .related-links')) rail.append(s);
+    else article.append(s);
+  });
+  if (rail.children.length) {
+    bodyGrid.append(article, rail);
+  } else {
+    bodyGrid.append(article);
+  }
+  bodySection.append(bodyGrid);
+  main.append(bodySection);
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -271,6 +372,7 @@ export function decorateMain(main) {
   decorateBlocks(main);
   decorateButtons(main);
   decorateNewsArticle(main);
+  decorateFigmaArticle(main);
 }
 
 /**

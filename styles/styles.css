@@ -658,3 +658,26 @@ body.columns main > .section:empty {
 main[hidden] {
   display: none !important;
 }
+
+/* University of Auckland — News (Aug 2026) redesign design tokens.
+   Shared by the redesigned index and article blocks (hero-carousel,
+   latest-news, key-points, related-links, share, gallery, find-an-expert,
+   experience, media-cta). Derived from the Figma frames (variable export is
+   gated by the Figma plan, so values are matched by eye + computed styles). */
+:root {
+  --uoa-navy: #0c0c48;          /* headings, tabs, footer, buttons */
+  --uoa-blue: #1f2bd4;          /* links, dates, accents */
+  --uoa-lavender: #e9e9fb;      /* title block + callout tint */
+  --uoa-lavender-soft: #f1f1fd; /* softer callout background */
+  --uoa-grey-band: #f3f3f6;     /* alternating section band */
+  --uoa-ink: #0c0c48;           /* primary text on light */
+  --uoa-muted: #4a4a4c;         /* teaser/secondary text */
+  --uoa-hairline: #d9d9e3;      /* card/box borders */
+  --uoa-pill-bg: #eef0ff;       /* category tag pill background */
+  --uoa-content-max: 1152px;    /* redesign content column */
+  --uoa-article-measure: 652px; /* article body measure */
+  --uoa-radius-card: 10px;
+  --uoa-radius-pill: 30px;
+  --uoa-font-display: interdisplay, inter, sans-serif;
+  --uoa-font-body: inter, sans-serif;
+}

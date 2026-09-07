@@ -448,6 +448,46 @@
     ]
   },
   {
+    "id": "experience",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Poster image",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "video",
+        "label": "Video link",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Title + description",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "find-an-expert",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "photo",
+        "label": "Expert photo",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Name + bio",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {
@@ -460,6 +500,59 @@
         "component": "text",
         "name": "fragmentUrlText",
         "label": "Fragment URL Text"
+      }
+    ]
+  },
+  {
+    "id": "gallery",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "hero-carousel",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Slide image",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Category label",
+        "valueType": "string",
+        "description": "Small pill above the heading (e.g. University News)."
+      },
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "date",
+        "label": "Date",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "text",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Read more link",
+        "valueType": "string"
       }
     ]
   },
@@ -492,6 +585,44 @@
         "name": "subtext",
         "value": "",
         "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "key-points",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "points",
+        "label": "Points",
+        "valueType": "string",
+        "description": "A bullet list of key points."
+      }
+    ]
+  },
+  {
+    "id": "latest-news",
+    "fields": [
+      {
+        "component": "text",
+        "name": "heading",
+        "value": "Latest News",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "count",
+        "value": "9",
+        "label": "Count",
+        "valueType": "number",
+        "description": "How many cards to show (default 9)."
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Browse all link",
         "valueType": "string"
       }
     ]
@@ -535,6 +666,23 @@
         "label": "Email address",
         "valueType": "string",
         "description": "Rendered with an \"E:\" prefix as a mailto link."
+      }
+    ]
+  },
+  {
+    "id": "media-cta",
+    "fields": [
+      {
+        "component": "text",
+        "name": "text",
+        "label": "Message",
+        "valueType": "string"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Button link",
+        "valueType": "string"
       }
     ]
   },
@@ -645,6 +793,30 @@
         "label": "Position",
         "valueType": "string",
         "description": "Their role or organisation."
+      }
+    ]
+  },
+  {
+    "id": "related-links",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "links",
+        "label": "Links",
+        "valueType": "string",
+        "description": "A list of related links."
+      }
+    ]
+  },
+  {
+    "id": "share",
+    "fields": [
+      {
+        "component": "text",
+        "name": "classes",
+        "label": "Variant",
+        "valueType": "string",
+        "description": "Leave empty for the default, or 'colour' for the navy variant."
       }
     ]
   },
