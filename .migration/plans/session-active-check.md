@@ -102,3 +102,39 @@ Top → bottom: **New Header (Aug)** → navy page banner ("News and opinion") �
 ---
 
 **Note:** This is the plan only. Creating the `FIGMA` branch and building the blocks are write operations requiring **Execute mode**. Approve to proceed and I'll start with Phase 0 (branch creation) — and I will not touch `main`. One decision I'll need before Phase 2: whether the redesigned index **replaces** or **sits alongside** the current 10-section `news-feed`.
+
+---
+
+## DELIVERED — final comparison URLs (as built)
+
+All redesign block code (JS/CSS) lives **only on the `FIGMA` branch**; `main` is untouched
+(`d52655c`). The branch prefix in the host is what flips old-vs-new styling. Redesign
+content pages (`index-redesign`, `article-redesign`) are DA pages, published on both
+branches, but only render *styled* on `FIGMA` because that is where the block code exists.
+
+**Important:** Edge Delivery serves clean URLs — do **NOT** append `.html` (that 404s).
+Swap `.aem.page` → `.aem.live` for the live tier.
+
+### News index
+| Design | URL |
+| --- | --- |
+| **Old** (original 10-section index) | `https://main--aem-boilerplate-commerce--wfranksadobe.aem.page/nz/en/news/` |
+| **New** (Aug 2026 redesign) | `https://figma--aem-boilerplate-commerce--wfranksadobe.aem.page/nz/en/news/index-redesign` |
+
+### Article (same content; branch flips the styling)
+| Design | URL |
+| --- | --- |
+| **Old** | `https://main--aem-boilerplate-commerce--wfranksadobe.aem.page/nz/en/news/article-redesign` |
+| **New** | `https://figma--aem-boilerplate-commerce--wfranksadobe.aem.page/nz/en/news/article-redesign` |
+
+### Notes
+- **News-index hero fixed & migrated:** `hero.jpg` was never uploaded to DA (404 on
+  preview/live). Uploaded to DA + republished; the pipeline ingested it
+  (`media_10f32…jpg`) and it now returns 200 on preview and live. Content/asset only —
+  no `main` code change.
+- **New page names:** index `index-redesign`, article `article-redesign`, both under
+  `/nz/en/news/`.
+- **Redesign images:** currently reuse the single news `hero.jpg` as a stand-in for the
+  carousel / experience / expert / gallery images — swap in real assets when finalised.
+- **Branch verification:** redesign block code returns 200 on `figma`, 404 on `main`
+  (e.g. `/blocks/hero-carousel/hero-carousel.css`).
