@@ -141,15 +141,16 @@ function buildCard(row) {
 }
 
 /**
- * Zebra-stripe the visible news-feed sections: every second one that actually
- * rendered gets a grey background. Runs after each block decorates (idempotent),
- * so the striping stays correct regardless of which categories are empty/hidden.
+ * Zebra-stripe the visible news-feed sections to match the source: the FIRST
+ * visible section gets a grey band, then white, then grey… Runs after each
+ * block decorates (idempotent), so the striping stays correct regardless of
+ * which categories are empty/hidden.
  */
 function restripeSections() {
   const sections = [...document.querySelectorAll('.section.news-feed-container')]
     .filter((s) => !s.hasAttribute('hidden') && s.querySelector('.news-feed:not([hidden])'));
   sections.forEach((s, i) => {
-    s.classList.toggle('news-feed-section--alt', i % 2 === 1);
+    s.classList.toggle('news-feed-section--alt', i % 2 === 0);
   });
 }
 
